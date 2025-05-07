@@ -7,12 +7,6 @@ class User(AbstractUser):
     pronombre = models.CharField(max_length=5,choices=pronombres)
     apodo = models.CharField(max_length=30)
 
-class Deliverer(User):
-    pass
-
-class Customer(User):
-    pass
-
 class Shop(models.Model):
     shopID = models.IntegerField()
     shopDescription = models.TextField()
