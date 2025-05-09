@@ -3,6 +3,9 @@ from urappiapp.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 
+def home_view(request):
+    return render(request, "urappiapp/index.html")
+
 # Create your views here.
 def register_user(request):
     if request.method == 'GET':
