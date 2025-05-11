@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "./daisyui";
+@source "../../../**/templates/**/*.{html,js}";
 @plugin "./daisyui-theme" {
   name: "urappi-theme";
   default: true;
@@ -42,5 +43,3 @@
   --depth:1;
   --noise: 1;
 }
-
-@source "../../**/templates/**/*.{html,js}";
