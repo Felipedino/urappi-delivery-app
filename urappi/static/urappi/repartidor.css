@@ -1,0 +1,171 @@
+body, html {
+            height: 100%; /* Asegura que ocupen toda la altura de la ventana */
+            margin: 0;
+            padding: 0;
+            display: flex; /* Para el layout de las dos columnas */
+        }
+
+        .sidebar-perfil {
+            width: 35%;
+            height: 100%;
+            background-color: #f8f9fa; /* Un color de fondo ligero para el perfil */
+            padding: 20px;
+            box-sizing: border-box; /* Incluye el padding en el ancho */
+            overflow-y: auto; /* Si el contenido del perfil es largo */
+        }
+
+        .main-content-pedidos {
+            width: 65%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto; /* Si la lista de pedidos es larga, permitirá el scroll */
+        }
+
+.perfil-contenedor {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            width: 300px; 
+            text-align: center;
+            
+    position: relative; 
+        }
+
+        .foto-perfil {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #eee; 
+            margin: 0 auto 10px;
+            overflow: hidden; 
+        }
+
+        .foto-perfil img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+        }
+
+        .nombre-repartidor {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+       .dinero-repartidor {
+    position: absolute; /* Lo saca del flujo normal dentro de .perfil-contenedor */
+    top: 10px;      /* Ajusta la distancia desde la parte superior */
+    right: 10px;    /* Ajusta la distancia desde la derecha */
+    font-weight: bold; /* Opcional: para que destaque */
+    /* Otros estilos que desees aplicar (color, tamaño, etc.) */
+}
+    
+        :root {
+                --color-green: #00a878;
+                --color-red: #ffd3c5;
+                --color-button: #fdffff;
+                --color-black: #000;
+            }
+            .switch-button {
+                display: inline-block;
+            }
+            .switch-button .switch-button__checkbox {
+                display: none;
+            }
+            .switch-button .switch-button__label {
+                background-color: var(--color-red);
+                width: 3.5rem;
+                height: 1.5rem;
+                border-radius: 1.5rem;
+                display: inline-block;
+                position: relative;
+            }
+            .switch-button .switch-button__label:before {
+                transition: .2s;
+                display: block;
+                position: absolute;
+                width: 1.5rem;
+                height: 1.5rem;
+                background-color: var(--color-button);
+                content: '';
+                border-radius: 60%;
+                box-shadow: inset 0px 0px 0px 1px var(--color-black);
+            }
+            .switch-button .switch-button__checkbox:checked + .switch-button__label {
+                background-color: var(--color-green);
+            }
+            .switch-button .switch-button__checkbox:checked + .switch-button__label:before {
+                transform: translateX(2rem);
+            }
+
+            
+            
+.pedidos-container {
+    display: flex; /* Para organizar los bloques de pedido en fila (horizontalmente) */
+    flex-direction: column; /* Cambiamos a columna para que los pedidos se apilen verticalmente */
+    padding: 10px;
+}
+
+.pedidos-container {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+.ejemplo-pedido {
+    border: 1px solid #eee; 
+    margin-bottom: 10px; 
+    padding: 15px;
+    display: flex; 
+    align-items: center; 
+    position: relative;
+}
+
+.comprador {
+    font-size: 1.2em; 
+    font-weight: bold;
+    margin-right: 15px; 
+    flex-grow: 1; 
+}
+
+.dinero {
+    top: 10px;
+    right: 10px;
+    font-weight: bold;
+    color: green; /* Puedes cambiar el color del precio */
+}
+
+.lugar {
+    color: black; 
+        margin-right: 70px; 
+
+}
+
+.id-pedido,
+.hora,
+.tienda {
+    color: #777; 
+    margin-right: 10px;
+}
+
+.boton-pedido {
+    background-color: #048c4f; 
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+.boton-rechazo {
+    background-color: #b3003e; 
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
