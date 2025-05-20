@@ -1,0 +1,18 @@
+{% load static %}
+{% block content %}
+
+<div id="store-block">
+  <div id="store-pic">
+    <img src="{% static tienda.imageURL %}" width="100" />
+  </div>
+
+  <div id="store-info">
+
+    <h1>{{tienda.shopName}}</h1>
+    <p>Ubicación: {{tienda.ubication}}</p>  
+    <p>{{ tienda.shopDescription }} </p>
+
+  </div>
+</div>
+
+{% endblock content %}

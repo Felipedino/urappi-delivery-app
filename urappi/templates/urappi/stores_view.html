@@ -1,0 +1,21 @@
+<!-- Página con listado de tiendas -->
+{% extends 'urappi/base.html' %} 
+
+{% block title %}Inicio{% endblock %} 
+
+{% block content %}
+<!-- Sección: Información del usuario -->
+{% include "urappi/stores_view/_user_info.html" %}
+
+<!-- Separador -->
+<hr class="my-6" />
+
+<!-- Sección: Listado de tiendas -->
+<!-- Se crea un bloque por cada tienda -->
+<div class="">
+  {% for tienda in tiendas %} 
+    {% include "urappi/stores_view/_store_detail.html" %} 
+  {% endfor %}
+</div>
+
+{% endblock content %}
