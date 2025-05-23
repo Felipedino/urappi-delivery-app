@@ -1,0 +1,22 @@
+
+{% block content %}
+{% load static %}
+<div>
+  <div id="usr-profile">
+    <img src="{% static usuario.profilePic %}" width="100" />
+  </div>
+
+  <div id="usr-info">
+    <!-- Me imagino que el nombre se debería sacar de la base de datos-->
+    <h1>Nombre de usuario: {{ usuario.nombre }}</h1>
+    <!-- El numero de upuntos también debería sacarse de la base de datos-->
+    <p>Actualmente tienes ${{ usuario.upuntos }} UPuntos</p>
+  </div>
+
+  <div id="shop-cart-link">
+    <button class="btn btn-primary">
+      <a href="/direccion/carrito/" class="top-menu">Ir al carrito</a>
+    </button>
+  </div>
+</div>
+{% endblock content %}

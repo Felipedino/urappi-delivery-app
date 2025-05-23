@@ -1,0 +1,20 @@
+<!--Pagina con menú de la tienda-->
+{% extends 'urappi/base.html' %} 
+
+{% block title %}Menú{% endblock %} 
+
+{% block content %}
+<!-- Sección: Información de la tienda -->
+{% include "pedidos/store_menu/_store_info.html" %}
+
+<!-- Separador -->
+<hr class="my-6" />
+
+<!-- Sección: Listado de productos -->
+<div class="">
+  {% for producto in productos %} 
+    {% include "pedidos/store_menu/_product_detail.html" %} 
+  {% endfor %}
+</div>
+
+{% endblock content %}
