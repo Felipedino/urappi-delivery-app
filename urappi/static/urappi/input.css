@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "./daisyui";
+@source "../../../**/templates/**/*.{html,js}";
 @plugin "./daisyui-theme" {
   name: "urappi-theme";
   default: true;
@@ -31,7 +32,7 @@
   --color-error-content: #ffffff;
   --radius-box: 0.5rem;
   --radius-selector: 0.5rem;
-  --radius-field: 2rem;
+  --radius-field: 0.5rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --btn-text-case: uppercase;
@@ -42,5 +43,3 @@
   --depth:1;
   --noise: 1;
 }
-
-@source "../../**/templates/**/*.{html,js}";
