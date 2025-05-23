@@ -1,0 +1,221 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex; 
+}
+
+.sidebar-perfil {
+  width: 35%;
+  height: 100%;
+  background-color: #d6dfe8;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.main-content-pedidos {
+  width: 65%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  body, html {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .app-header {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+      background-color: #f7f5f5;
+    justify-content: space-between; 
+    align-items: center; 
+    box-sizing: border-box;
+    margin-bottom: 5px; 
+    border-bottom: 1px solid #ccc;
+  }
+
+  .app-title {
+    font-size: 1.5em; 
+    color: #E74C3C; 
+    margin: 0; 
+  }
+
+  .perfil-activo-container {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+  }
+
+  .foto-perfil {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%; 
+    background-color: #fff8f8; 
+    overflow: hidden;
+    margin-bottom: 5px; 
+    display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  }
+
+  .foto-perfil img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+        :root {
+                --color-green: #00a878;
+                --color-red: #ffd3c5;
+                --color-button: #fdffff;
+                --color-black: #000;
+            }
+            .switch-button {
+                display: inline-block;
+            }
+            .switch-button .switch-button__checkbox {
+                display: none;
+            }
+            .switch-button .switch-button__label {
+                background-color: var(--color-red);
+                width: 3.5rem;
+                height: 1.5rem;
+                border-radius: 1rem;
+                display: inline-block;
+                position: relative;
+            }
+            .switch-button .switch-button__label:before {
+                transition: .2s;
+                display: block;
+                position: absolute;
+                width: 1.5rem;
+                height: 1.5rem;
+                background-color: var(--color-button);
+                content: '';
+                border-radius: 60%;
+                box-shadow: inset 0px 0px 0px 1px var(--color-black);
+            }
+            .switch-button .switch-button__checkbox:checked + .switch-button__label {
+                background-color: var(--color-green);
+            }
+            .switch-button .switch-button__checkbox:checked + .switch-button__label:before {
+                transform: translateX(2rem);
+            }
+
+            
+            
+.main-content-pedidos {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .pedidos-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .ejemplo-pedido {
+    border: 1px solid #eee;
+    margin-bottom: 5px;
+    padding: 10px;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  flex-direction: column; 
+  width: 100%;
+    box-sizing: border-box;
+    margin-right: 10px;
+    font-size: 0.8em;
+   
+}
+.comprador-lugar-container {
+    display: flex; 
+    align-items: baseline; 
+    width: 100%; 
+    margin-bottom: 1px; 
+  }
+.comprador {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-right: 8px; 
+  margin-bottom: 2px; 
+  flex-grow: 1; 
+  width: auto; 
+}
+
+.dinero {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+}
+
+.lugar {
+  color: black;
+  margin-right: 0; 
+  margin-bottom: 0px;
+  width: auto;
+}
+.hora-tienda-container {
+    display: flex;
+    align-items: baseline; 
+    width: 100%; 
+    margin-bottom: 2px; 
+  }
+
+.id-pedido{
+  color: #777;
+  margin-right: 0;
+  margin-bottom: 1px;
+  
+  flex-basis: auto;
+}
+
+  .hora {
+    color: #080808;
+    margin-right: 10px;
+    margin-bottom: 0;
+    flex-shrink: 0; 
+    width: auto; 
+    font-size: 0.9em;
+  }
+
+  .tienda {
+    color: #777;
+    margin-right: 0;
+    margin-bottom: 0;
+    flex-grow: 1; 
+    width: auto; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    font-size: 0.9em;
+  }
+.boton-pedido {
+background-color: #048c4f;
+color: white;
+border: none;
+padding: 8px 12px;
+margin-left: 5px;
+cursor: pointer;
+border-radius: 5px;
+font-size: 0.9em;
+}
+.boton-pedido,
+.boton-rechazo {
+  width: 100%; 
+  margin-left: 0;
+  margin-top: 5px;
+  flex-basis: auto;
+}
+
+}

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "urappiapp",
     "home",
+    'app_repartidor',
 ]
 
 MIDDLEWARE = [
