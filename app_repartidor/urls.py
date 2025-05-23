@@ -3,7 +3,11 @@ from django.urls import path
 from . import views
 import views 
 
-
+app_name = 'app_repartidor'
 urlpatterns = [
-    path('repartidor/', views.repartidor_perfil, name='repartidor_perfil'),
+    path('deliverer/', views.repartidor_perfil, name='repartidor_perfil'),
+    path('accepted-order/', views.accepted_order, name='accepted_order'),
+    path('order-details/<int:order_id>/', views.order_details, name='order_details'),
+
+
 ]

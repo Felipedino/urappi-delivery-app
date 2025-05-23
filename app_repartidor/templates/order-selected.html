@@ -17,7 +17,7 @@
 <div class="order-container">
         <div class="product-list-container">
         {% if product_list %}
-        <h3>Detalles de los Productos:</h3>
+        <h3>Lista de productos en la orden:</h3>
         
         {% for item in product_list %}
             <div class="product-item">
@@ -25,9 +25,6 @@
                 <p><strong>Descripción:</strong> {{ item.product.description }}</p> 
                 <p class="price"><strong>Precio:</strong> ${{ item.product.priceCLP }} CLP</p> 
                 <img src="{{ item.product.imageURL }}" alt="{{ item.product.productName }}" style="max-width: 100px; height: auto;">
-                {% if item.price_at_order %}
-                    <p><strong>Precio del pedido:</strong> ${{ item.price_at_order }} CLP (por unidad)</p>
-                {% endif %}
             </div>
         {% endfor %}
     </div>
@@ -46,7 +43,9 @@
                     </form>
 
 
-<div class="chat"></div>
+<div class="chat">
+<p>Chat</p>
+</div>
 
 </body>
 </html>
