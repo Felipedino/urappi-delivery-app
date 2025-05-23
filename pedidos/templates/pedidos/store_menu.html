@@ -5,7 +5,7 @@
 
 {% block content %}
 <!-- Sección: Información de la tienda -->
-{% include "urappi/store_menu/_store_info.html" %}
+{% include "pedidos/store_menu/_store_info.html" %}
 
 <!-- Separador -->
 <hr class="my-6" />
@@ -13,7 +13,7 @@
 <!-- Sección: Listado de productos -->
 <div class="">
   {% for producto in productos %} 
-    {% include "urappi/store_menu/_product_detail.html" %} 
+    {% include "pedidos/store_menu/_product_detail.html" %} 
   {% endfor %}
 </div>
 
