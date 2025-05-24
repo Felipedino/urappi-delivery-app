@@ -5,9 +5,15 @@ def show_listado_tiendas(request):
     # Por mientras voy a poner información de mentira
     # Esta info tampoco representa la estructura real de la base de datos
     tiendas = [
-        {"shopID": 1, "shopName": "Pizza Express", "description": "Pizzas rápidas y sabrosas", "imageURL": "pedidos/svg/store-icon.png"},
-        {"shopID": 2, "shopName": "Sushi House", "description": "Delicioso sushi fresco", "imageURL": "pedidos/svg/store-icon.png"},
-        {"shopID": 3, "shopName": "Taco Loco", "description": "Tacos al mejor estilo mexicano", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 1, "shopName": "Cafeta", "description": "Café, pasteles, empanadas, etc.", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 2, "shopName": "Delta Te", "description": "Café de especialidad", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 3, "shopName": "La Sonia", "description": "Tacos al mejor estilo mexicano", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 4, "shopName": "Máquina de café industrias", "description": "Café", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 5, "shopName": "Máquina de café industrias", "description": "Café", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 6, "shopName": "Máquina de café industrias", "description": "Café", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 7, "shopName": "Máquina de café industrias", "description": "Café", "imageURL": "pedidos/svg/store-icon.png"},
+        {"shopID": 8, "shopName": "Máquina de café industrias", "description": "Café", "imageURL": "pedidos/svg/store-icon.png"},
+
     ]
     usuario = {
         "nombre": "Juanin", "upuntos":1000, "profilePic": "pedidos/svg/portrait_placeholder.png"

@@ -7,14 +7,24 @@
 <!-- Sección: Información de la tienda -->
 {% include "pedidos/store_menu/_store_info.html" %}
 
-<!-- Separador -->
-<hr class="my-6" />
 
 <!-- Sección: Listado de productos -->
-<div class="">
-  {% for producto in productos %} 
-    {% include "pedidos/store_menu/_product_detail.html" %} 
-  {% endfor %}
+<div class="list items-center">
+  <ul>
+    {% for producto in productos %} 
+      {% include "pedidos/store_menu/_product_detail.html" %} 
+    {% endfor %}
+  </ul>
+  
 </div>
+
+<script>
+  let quantity = 0;
+
+  function changeQuantity(amount, name) {
+    quantity = Math.max(0, quantity + amount);  // evitar negativos
+    document.getElementById("quantity").textContent = quantity;
+  }
+</script>
 
 {% endblock content %}

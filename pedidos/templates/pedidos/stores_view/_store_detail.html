@@ -1,18 +1,20 @@
 <!-- Esto no considera el diseño real de la base de datos -->
- {% load static %}
-<a href="{% url 'show_store_menu' tienda.shopID %}">
-  <div
-    class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6"
-  >
-    <img
-      src="{% static tienda.imageURL %}"
-      alt="{{ tienda.shopName }}"
-      class="w-[50px] h-auto object-cover rounded-lg flex-shrink-0"
-    />
-    <div class="flex-1">
-      <h3 class="text-xl font-bold mb-2">{{ tienda.shopName }}</h3>
-      <p class="text-gray-600 mb-1">{{ tienda.description }}</p>
+{% load static %}
+<li>
+  <a href="{% url 'show_store_menu' tienda.shopID %}">
+    <div class="card bg-base-100 w-96 shadow-sm">
+      <figure>
+        <img
+        src="{% static tienda.imageURL %}"
+        alt="{{ tienda.shopName }}"
+        />
+      </figure>
+      
+      <div class="card-body">
+        <h3 class="card-title">{{ tienda.shopName }}</h3>
+        <p class="">{{ tienda.description }}</p>
+      </div>
+      
     </div>
-    
-  </div>
-</a>
+  </a>
+</li>
