@@ -1,35 +1,28 @@
 <!-- Este html corresponde a cada cuadro con información del producto en el menú de la tienda-->
 {% load static %}
-<div
-  class="max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6"
->
+<div class="list-row">
   <img
     src="{% static producto.imageURL %}"
     alt="{{ producto.ProductName }}"
-    class="w-auto h-auto object-cover rounded-lg flex-shrink-0"
   />
-  <div class="flex-1">
-    <h3 >{{ producto.ProductName }}</h3>
-    <p class=""> ${{ producto.priceCLP }}</p>
-    <p class=""> Descripción: {{ producto.description }}</p>
-    <p class=""> </p>
-    <!-- Los botones no funcionan bien porque no se identifica a cual producto sumar -->
-    <div class="flex items-center space-x-2">
-      <button onclick="changeQuantity(-1)" class="px-2 py-1 bg-red-500 text-white rounded">-</button>
-      <span id="quantity" class="text-lg">0</span>
-      <button onclick="changeQuantity(1)" class="px-2 py-1 bg-green-500 text-white rounded">+</button>
+  <div class="">
+    <!--Descripción del producto-->
+    <div class="textarea-md">
+      <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
+      <p class=""> {{ producto.description }}</p>
+      <p class="font-bold"> ${{ producto.priceCLP }}</p>
     </div>
-    
-    <button onclick="" class="">Agregar</button>
-    <p>---</p>
-  </div>
-  
-  <script>
-  let quantity = 0;
 
-  function changeQuantity(amount, name) {
-    quantity = Math.max(0, quantity + amount);  // evitar negativos
-    document.getElementById("quantity").textContent = quantity;
-  }
-</script>
+    <!--Botones para agregar y elegir cantidad del producto-->
+    <div class="flex items-center">
+      <div class="list-row items-center">
+        <button onclick="changeQuantity(-1)" class="btn btn-circle">-</button>
+        <span id="quantity" class="card card-xl">0</span>
+        <button onclick="changeQuantity(1)" class="btn btn-circle">+</button>
+      </div>
+
+      <button onclick="" class="btn btn-primary">Agregar</button>
+    </div>  
+    
+  </div>
 </div>
