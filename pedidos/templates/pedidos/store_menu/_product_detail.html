@@ -16,9 +16,9 @@
     <!--Botones para agregar y elegir cantidad del producto-->
     <div class="flex items-center">
       <div class="list-row items-center">
-        <button onclick="changeQuantity(-1)" class="btn btn-circle">-</button>
-        <span id="quantity" class="card card-xl">0</span>
-        <button onclick="changeQuantity(1)" class="btn btn-circle">+</button>
+        <button onclick="changeQuantity(-1, '{{ producto.ProductName }}')" class="btn btn-circle">-</button>
+        <input id="quantity-{{ producto.ProductName }}" type="number" style="width: 2ch;" class="input items-center" size="2" value="0" readonly  />
+        <button onclick="changeQuantity(1, '{{ producto.ProductName }}')" class="btn btn-circle">+</button>
       </div>
 
       <button onclick="" class="btn btn-primary">Agregar</button>

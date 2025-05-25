@@ -17,14 +17,14 @@ def show_listado_tiendas(request):
     ]
 
     # Con esto se debería pedir la información a la base de datos, como no tienen info voy a usar la info estática
-    #tiendas = Shop.objects.all()
+    tiendas = Shop.objects.all()
     
 
     usuario = {
         "nombre": "Juanin", "upuntos":1000, "profilePic": "pedidos/svg/portrait_placeholder.png"
     }
 
-    info = {"usuario": usuario, "tiendas": tiendas_ej}
+    info = {"usuario": usuario, "tiendas": tiendas}
 
     return render(request, 'pedidos/stores_view.html', info)
 
