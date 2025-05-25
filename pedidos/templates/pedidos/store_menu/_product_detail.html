@@ -2,8 +2,9 @@
 {% load static %}
 <div class="list-row">
   <img
-    src="{% static producto.imageURL %}"
+    src="{{ producto.imageURL|safe }}"
     alt="{{ producto.ProductName }}"
+    width="150px"
   />
   <div class="">
     <!--Descripción del producto-->
@@ -17,7 +18,7 @@
     <div class="flex items-center">
       <div class="list-row items-center">
         <button onclick="changeQuantity(-1, '{{ producto.ProductName }}')" class="btn btn-circle">-</button>
-        <input id="quantity-{{ producto.ProductName }}" type="number" style="width: 2ch;" class="input items-center" size="2" value="0" readonly  />
+        <input id="quantity-{{ producto.ProductName }}" type="number" style="width: 5ch;" class="input items-center" size="2" value="0" readonly  />
         <button onclick="changeQuantity(1, '{{ producto.ProductName }}')" class="btn btn-circle">+</button>
       </div>
 
