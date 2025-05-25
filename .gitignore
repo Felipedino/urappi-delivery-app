@@ -1,3 +1,4 @@
 venv/
 urappi/static/urappi/tailwindcss.exe
 __pycache__/
+home/migrations/__pycache__/

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends "urappi/base.html" %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+        <h1 class="text-2xl font-bold">Welcome to the Home Page</h1>
+        <button class="btn btn-primary">Home Button XD</button>
+        <button class="btn btn-outline btn-primary">Primary</button>
+
+        <hr>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Cerrar sesión </a>
+        {% else %}
+           <a href="{% url 'register_user' %}">Registrarse</a>
+           <a href="{% url 'login' %}">Iniciar Sesión</a>
+        {% endif %}
+        <hr>
+
+        
+{% endblock %}

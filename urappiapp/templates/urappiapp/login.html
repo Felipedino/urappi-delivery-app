@@ -1,0 +1,38 @@
+{% extends "urappi/base.html" %} 
+{% block title %}Iniciar sesión{% endblock %} 
+
+
+{% block content %}
+<div class="flex items-center justify-center h-full bg-base-200">
+    <div class="card w-full max-w-md bg-base-100 shadow-xl card-body">
+        <h2 class="card-title justify-center"> 🔒 Iniciar sesión </h2>
+
+        {% if login_failed %}
+            <p class="text-center text-sm mb-4 text-red-500"> Error al iniciar sesión: Nombre de usuario o contraseña incorrectos. </p>
+        {% endif %}
+
+        <form method="post" >
+            {% csrf_token %}
+
+            <div class="form-control mb-4">
+                <label class="label" for="nombre_usuario">
+                    <span class="label-text"> Usuario </span>
+                </label>
+                <input type="text" id="nombre_usuario" name="username" class="input input-bordered input-primary w-full" required />
+            </div>
+
+            <div class="form-control mb-4">
+                <label class="label" for="contraseña">
+                    <span class="label-text"> Contraseña </span>
+                </label>
+                <input type="password" id="contraseña" name="contraseña" class="input input-bordered input-primary w-full" required />
+            </div>
+
+            <div class="form-control mt-6">
+                <button type="submit" class="btn btn-primary w-full"> Entrar </button>
+            </div>
+        </form>
+    </div>
+</div>
+</html>
+{% endblock %}

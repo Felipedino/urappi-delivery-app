@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+{% extends "urappi/base.html" %} 
+{% block title %}Registro{% endblock %} 
+
+{% block content %}
+
+<div class="flex items-center justify-center h-full bg-base-200">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title justify-center">👤 Registro</h2>
+      <p class="text-center text-sm mb-4">Crea tu cuenta para usar URappi</p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="form-control mb-4">
+          <label class="label" for="nombre_usuario">
+            <span class="label-text">Nombre</span>
+          </label>
+          <input type="text" id="nombre_usuario" name="nombre" class="input input-bordered input-primary w-full" required />
+        </div>
+
+        <div class="form-control mb-4">
+          <label class="label" for="mail">
+            <span class="label-text">Correo</span>
+          </label>
+          <input type="email" id="mail" name="mail" class="input input-primary input-bordered w-full" required />
+        </div>
+
+        <div class="form-control mb-4">
+          <label class="label" for="contraseña">
+            <span class="label-text">Contraseña</span>
+          </label>
+          <input type="password" id="contraseña" name="contraseña" class="input input-bordered input-primary w-full" required />
+        </div>
+
+        <div class="form-control mb-4">
+          <label class="label" for="rol">
+            <span class="label-text">Rol</span>
+          </label>
+          <select id="rol" name="rol" class="select select-bordered select-primary w-full" required>
+            <option disabled selected value="">Selecciona un rol</option>
+            <option value="customer">Cliente</option>
+            <option value="deliver">Repartidor</option>
+          </select>
+        </div>
+        <div class="form-control mt-6">
+          <button type="submit" class="btn btn-primary w-full">Crear usuario</button>
+        </div>
+      </form>
+      <p class="text-center text-sm">
+        ¿Ya tienes cuenta?
+        <a href="{% url 'login' %}" class="link link-hover text-primary">Iniciar sesión</a>
+      </p>
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -7,18 +7,16 @@ class User(AbstractUser):
     pronombre = models.CharField(max_length=5,choices=pronombres)
     apodo = models.CharField(max_length=30)
 
-class Deliverer(User):
-    pass
-
-class Customer(User):
-    pass
-
 class Shop(models.Model):
     shopID = models.IntegerField()
     shopDescription = models.TextField()
-    isOpen = models.BooleanField()
+    openTime = models.TimeField()
+    closingTime = models.TimeField()
     shopName = models.CharField(max_length = 32)
     imageURL = models.URLField()
+    location = models.TextField()
+    def __str__(self):
+        return self.shopName
 
 class Product(models.Model):
     productID = models.IntegerField()
@@ -27,11 +25,16 @@ class Product(models.Model):
     description = models.TextField()
     imageURL = models.URLField()
     priceCLP = models.IntegerField()
+    def __str__(self):
+        return self.productName + str(self.productID)
+
 
 class ProductListing(models.Model):
     listedBy = models.ForeignKey(Shop, on_delete=models.CASCADE)
     listedProduct = models.ForeignKey(Product, on_delete=models.CASCADE)
     stockQuantity = models.IntegerField()
+    def __str__(self):
+        return str(self.listedBy) + " " + str(self.listedProduct)
 
 class Order(models.Model):
     orderID = models.IntegerField()

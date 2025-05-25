@@ -1,0 +1,19 @@
+{% load static %}
+{% block content %}
+
+<div class="hero bg-base-200 min-h-screen/2">
+  <div class="hero-content flex-col lg:flex-row">
+     <img src="{{tienda.imageURL}}" class="max-w-sm shadow-2xl" />
+
+    <div id="store-info">
+
+      <h1 class="text-xl font-bold">{{tienda.shopName}}</h1>
+      <p>Ubicación: {{tienda.ubication}}</p>  
+      <p class="py-6">{{ tienda.shopDescription }} </p>
+
+    </div>
+  </div>
+  
+</div>
+
+{% endblock content %}

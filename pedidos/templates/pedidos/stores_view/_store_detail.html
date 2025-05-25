@@ -1,0 +1,20 @@
+<!-- Esto no considera el diseño real de la base de datos -->
+{% load static %}
+<li>
+  <a href="{% url 'show_store_menu' tienda.shopID %}">
+    <div class="card bg-base-100 w-96 shadow-sm">
+      <figure>
+        <img
+        src="{{tienda.imageURL }}"
+        alt="{{ tienda.shopName }}"
+        />
+      </figure>
+      
+      <div class="card-body">
+        <h3 class="card-title">{{ tienda.shopName }}</h3>
+        <p class="">{{ tienda.shopDescription }}</p>
+      </div>
+      
+    </div>
+  </a>
+</li>
