@@ -19,11 +19,11 @@
 </div>
 
 <script>
-  let quantity = 0;
-
-  function changeQuantity(amount, name) {
-    quantity = Math.max(0, quantity + amount);  // evitar negativos
-    document.getElementById("quantity").textContent = quantity;
+  function changeQuantity(amount, productName) {
+    const input = document.getElementById(`quantity-${productName}`);
+    let current = parseInt(input.value) || 0;
+    let newValue = Math.max(0, current + amount);
+    input.value = newValue;
   }
 </script>
 
