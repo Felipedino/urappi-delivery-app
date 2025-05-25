@@ -6,7 +6,10 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 def register_user(request):
     if request.method == 'GET':
-        return render(request, "urappiapp/register_user.html")
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
+        else:
+            return render(request, "urappiapp/register_user.html")
 
     elif request.method == 'POST':
         nombre = request.POST['nombre']
@@ -21,9 +24,13 @@ def register_user(request):
     
 def login_user(request):
     if request.method == 'GET':
-        return render(request,"urappiapp/login.html")
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
+        else:
+            return render(request,"urappiapp/login.html")
     
     if request.method == 'POST':
+        
         username = request.POST['username']
         contraseña = request.POST['contraseña']
         usuario = authenticate(username=username,password=contraseña)
@@ -31,7 +38,7 @@ def login_user(request):
             login(request,usuario)
             return HttpResponseRedirect('/')
         else:
-            return HttpResponseRedirect('/register')
+            return render(request, "urappiapp/login.html", {'login_failed': True})
         
 def logout_user(request):
     logout(request)
