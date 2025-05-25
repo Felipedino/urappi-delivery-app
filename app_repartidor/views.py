@@ -100,7 +100,7 @@ def order_details(request):
             "time": "19:00",
             "createdAt": "La Cafeta",
             "product_list":productos,
-            "bill": "5000CLP"
+            "bill": "500CLP"
             }
         
         
