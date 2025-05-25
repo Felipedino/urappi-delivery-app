@@ -1,33 +1,60 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="urappi-theme">
-  <head>
-    <title>{% block title %}Urappi{% endblock title %}</title>
-    <!-- Titulo por defecto -->
-    {% load static %}
-    <link
-      href="{% static 'urappi/output.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
-    {% block extra_css %}{% endblock extra_css %}
-  </head>
-  <body>
-    {% block header %}
-    <header>
-      <!-- Common navigation or header elements -->
-    </header>
-    {% endblock header %}
 
-    <main>
-      {% block content %}
-      <!-- Default content goes here -->
-      {% endblock content %}
-    </main>
+<html class="h-full" lang="es" data-theme="urappi-theme">
+    <head>
+        <title>{% block title %} Urappi {% endblock %}</title>
+        <!-- Titulo por defecto -->
+        {% load static %}
+        <link
+            href="{% static 'urappi/output.css' %}"
+            rel="stylesheet"
+            type="text/css"
+        />
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body class="h-full flex flex-col">
 
-    {% block footer %}
-    <footer>
-      <!-- Common footer elements -->
-    </footer>
-    {% endblock footer %} {% block extra_js %}{% endblock extra_js %}
-  </body>
+        {% block header %}
+        <header class="bg-gradient-to-r from-primary to-secondary text-white">
+            <!-- header elements -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'images/logo.png' %}" alt="Urappi Logo" class="h-20 object-contain">
+                </a>
+
+                <nav class="flex space-x-4">
+                {% if user.is_authenticated %}
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                    <a href="{% url 'logout' %}">Cerrar sesión </a>    
+                </div>
+                {% else %}
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                    <a href="{% url 'register_user' %}">Registrarse</a>
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                    <a href="{% url 'login' %}">Iniciar Sesión</a>
+                </div>
+                {% endif %}
+                </nav>
+            </div>
+
+
+        </header>
+        {% endblock %}
+
+
+        <main class="flex-grow">
+            {% block content %}
+            <!-- Default content goes here -->
+            {% endblock %}
+        </main>
+
+        {% block footer %}
+        <footer>
+            <!-- Common footer elements -->
+        </footer>
+        {% endblock footer %}
+
+        {% block extra_js %}{% endblock %}
+    </body>
 </html>
