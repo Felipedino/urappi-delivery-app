@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil del Repartidor</title>
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'urappi/repartidor.css' %}">
+
+</head>
+<body>
+<div class="app-header">
+    <h1 class="app-title">Urappi</h1>
+    <div class="perfil-activo-container">
+      <div class="foto-perfil">
+        <img src="{% static 'urappi/svg/voldemort.webp' %}" alt="Foto de perfil">
+      </div>
+            
+            <div class="switch-button">
+                <input type="checkbox" name="switch-button" id="switch-label" class="switch-button__checkbox">
+                <label for="switch-label" class="switch-button__label"></label>
+            </div>
+        </div>
+        </div>
+
+    <div class="main-content-pedidos">
+        <div class="pedidos-container">
+            <div class="ejemplo-pedido">
+                <p class="id-pedido">#123443</p>
+                 <div class="comprador-lugar-container">
+                    <p class="comprador">Lucho</p>
+                    <p class="lugar">Centro Modelamiento matemático</p>
+                 </div>
+                <div class="hora-tienda-container">
+                    <p class="hora">11:30 AM</p>
+                    <p class="tienda">La Sonia</p>
+                </div>
+                    <p class="dinero">CLP500</p>
+                <button class="boton-pedido">Aceptar</button>
+            </div>
+
+            <div class="ejemplo-pedido">
+                <p class="id-pedido">#1</p>
+                <div class="comprador-lugar-container">
+                    <p class="comprador">Almendra</p>
+                    <p class="lugar">Geología 301</p>
+                </div>
+                <div class="hora-tienda-container">
+                    <p class="hora">13:30 PM</p>
+                    <p class="tienda">Delta T</p>
+                </div>
+                <p class="dinero">CLP1500</p>
+                <button class="boton-pedido">Aceptar</button>
+            </div>
+             <div class="ejemplo-pedido">
+                <p class="id-pedido">#15465</p>
+                <div class="comprador-lugar-container">
+                    <p class="comprador">Javiera</p>
+                    <p class="lugar">Auditorio Picarte</p>
+                </div>
+                <div class="hora-tienda-container">
+                    <p class="hora">11:30 AM</p>
+                    <p class="tienda">Casino</p>
+                </div>
+                <p class="dinero">CLP2500</p>
+                <button class="boton-pedido">Aceptar</button>
+            </div>
+             <div class="ejemplo-pedido">
+                <p class="id-pedido">#64729</p>
+                <div class="comprador-lugar-container">
+                    <p class="comprador">Pablo</p>
+                    <p class="lugar">Civil Piso 3</p>
+                </div>
+                <div class="hora-tienda-container">
+                    <p class="hora">17:30 PM</p>
+                    <p class="tienda">Delta T</p>
+                </div>
+                <p class="dinero">CLP5500</p>
+                <button class="boton-pedido">Aceptar</button>
+            </div>
+
+            </div>
+    </div>
+
+    
+</body>
+
+    <script src="{% static 'urappi/repartidor.js' %}"></script>
+
+</html>

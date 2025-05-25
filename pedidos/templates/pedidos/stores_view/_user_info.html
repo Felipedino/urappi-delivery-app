@@ -1,0 +1,20 @@
+
+{% block content %}
+{% load static %}
+<div class="navbar bg-base-100 shadow-sm">
+  <div class="rounded-full">
+    <img src="{% static usuario.profilePic %}" width="100" />
+  </div>
+
+  <div>
+    <h1>{{ usuario.nombre }}</h1>
+    <p>Tienes ${{ usuario.upuntos }} UPuntos</p>
+  </div>
+
+  <div>
+    <button class="btn btn-primary">
+      <a href="/direccion/carrito/" class="top-menu">Ir al carrito</a>
+    </button>
+  </div>
+</div>
+{% endblock content %}

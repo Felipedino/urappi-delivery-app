@@ -1,0 +1,28 @@
+<!-- Este html corresponde a cada cuadro con información del producto en el menú de la tienda-->
+{% load static %}
+<div class="list-row">
+  <img
+    src="{% static producto.imageURL %}"
+    alt="{{ producto.ProductName }}"
+  />
+  <div class="">
+    <!--Descripción del producto-->
+    <div class="textarea-md">
+      <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
+      <p class=""> {{ producto.description }}</p>
+      <p class="font-bold"> ${{ producto.priceCLP }}</p>
+    </div>
+
+    <!--Botones para agregar y elegir cantidad del producto-->
+    <div class="flex items-center">
+      <div class="list-row items-center">
+        <button onclick="changeQuantity(-1)" class="btn btn-circle">-</button>
+        <span id="quantity" class="card card-xl">0</span>
+        <button onclick="changeQuantity(1)" class="btn btn-circle">+</button>
+      </div>
+
+      <button onclick="" class="btn btn-primary">Agregar</button>
+    </div>  
+    
+  </div>
+</div>

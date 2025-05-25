@@ -1,0 +1,30 @@
+<!--Pagina con menú de la tienda-->
+{% extends 'urappi/base.html' %} 
+
+{% block title %}Menú{% endblock %} 
+
+{% block content %}
+<!-- Sección: Información de la tienda -->
+{% include "pedidos/store_menu/_store_info.html" %}
+
+
+<!-- Sección: Listado de productos -->
+<div class="list items-center">
+  <ul>
+    {% for producto in productos %} 
+      {% include "pedidos/store_menu/_product_detail.html" %} 
+    {% endfor %}
+  </ul>
+  
+</div>
+
+<script>
+  let quantity = 0;
+
+  function changeQuantity(amount, name) {
+    quantity = Math.max(0, quantity + amount);  // evitar negativos
+    document.getElementById("quantity").textContent = quantity;
+  }
+</script>
+
+{% endblock content %}
