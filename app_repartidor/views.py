@@ -5,7 +5,10 @@ from django.views.decorators.http import require_POST , require_GET
 
 
 def repartidor_perfil(request):
-    ##pending_orders = Order.objects.filter(status = 1)
+    orders = Order.objects.filter(status = 1)
+    
+    ##usuario = 
+
     pending_orders =[
         {
             "orderID": "001",
@@ -64,17 +67,7 @@ def accepted_order(request):
 
 @require_GET
 def order_details(request):
-    #selected_order = get_object_or_404(Order, orderID =order_id)
-
-    items_list = 0
-    #info = {
-     #   'customer': selected_order.customer_name,
-      #  'customerID': selected_order.customer_id,
-       # 'orderID' :selected_order.orderID,
-        #'product_list': items_list,
-        #'deliverAt': selected_order.deliveredAt,
-
-        #}
+    
     productos=[ {
             "ProductName": "Chocolate Trencito",
             "priceCLP": 3000,
@@ -91,6 +84,20 @@ def order_details(request):
             }
         
         ]
+    
+
+    #selected_order = get_object_or_404(Order, orderID = order_id)
+
+    #info = {
+     #   'customer': selected_order.customer_name,
+       # 'orderID' :selected_order.orderID,
+        #'product_list': productos,
+        #'deliverAt': selected_order.deliveredAt,
+        # "time" : 19:00,
+        #"createdAt" : selected_order.createdAt
+        #"Status": selected_order.status,
+        #"bill" : "500CLP"
+        #}
 
     info ={
         "orderID":"001",
