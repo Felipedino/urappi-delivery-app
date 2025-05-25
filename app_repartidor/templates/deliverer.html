@@ -1,74 +1,80 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil del Repartidor</title>
-    {% load static %}
+{% extends 'urappi/base.html' %} 
+{% load static %}
+{% block title %}Perfil del Repartidor{% endblock title %}
 
-    <link rel="stylesheet" type="text/css" href="{% static 'deliverer.css' %}">
 
-</head>
-<body>
-<div class="app-header">
-    <h1 class="app-title">Urappi</h1>
-    <div class="perfil-activo-container">
-      <div class="foto-perfil">
-        <img src="{% static 'urappi/svg/voldemort.webp' %}" alt="Foto de perfil">
-      </div>
-            
-            <div class="switch-button">
-                <input type="checkbox" name="switch-button" id="switch-label" class="switch-button__checkbox">
-                <label for="switch-label" class="switch-button__label"></label>
+
+{% block header %}
+<header class="relative bg-gray-200 p-4 shadow-md flex justify-between items-center h-24">
+    
+    <div class="flex items-center">
+      
+        <div class="flex flex-col items-center mr-4">
+          
+            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-500"> 
+                <img src="{% static '/svg/user.png' %}" alt="Foto de perfil" class="w-full h-full object-cover">
             </div>
-        </div>
-        </div>
-
-    <div class="main-content-pedidos">
-        <div class="pedidos-container">
-            <div class="ejemplo-pedido">
-                <p class="id-pedido">#123443</p>
-                 <div class="comprador-lugar-container">
-                    <p class="comprador">Lucho</p>
-                    <p class="lugar">Centro Modelamiento matemático</p>
-                 </div>
-                <div class="hora-tienda-container">
-                    <p class="hora">11:30 AM</p>
-                    <p class="tienda">La Sonia</p>
-                </div>
-                    <p class="dinero">CLP500</p>
-                <button class="boton-pedido">Aceptar</button>
-            </div>
-            <div class="ejemplo-pedido">
-            {% if pending_orders%}
-                {%for pedido in pending_orders%}
-                    <p class="id-pedido">pedido.orderID</p>
-                    <div class="comprador-lugar-container">
-                        <p class="comprador">pedido.customer</p>
-                        <p class="lugar">pedido.deliveredAt</p>
-                    </div>
-                    <div class="hora-tienda-container">
-                        <p class="hora">pedido.time</p>
-                        <p class="tienda">pedido.store</p>
-                    </div>
-                        <p class="dinero">pedido.bill</p>
-                    <form action="{% url 'order_details' %}" method="post">
-                            <input type="hidden" name="order_id" value="{{ pedido.orderID }}">
-                            <button class="boton-pedido" type="submit">Detalles</button>
-                    </form>
-                {% endfor %}
-        </div>
-            {% else %}
-            <p>¡No hay pedidos pendientes en este momento!</p>
-            {% endif %}
 
            
-            </div>
+            <input type="checkbox" class="toggle toggle-success mt-[-10px]" id="switch-label">
+    
+        </div>
 
-            </div>
+      
+        <h1 class="text-2xl font-bold text-gray-800">Pepito</h1>
     </div>
 
     
-</body>
+    <div class="text-xl font-extrabold text-black">500PTS</div>
+</header>
+{% endblock header %}
 
-</html>
+
+{% block content %}
+<div class="main-content-pedidos container mx-auto px-4 py-8"> 
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Pedidos Pendientes</h1> 
+
+    <div class="pedidos-container flex flex-col gap-4 max-w-lg mx-auto"> 
+        {% if pending_orders %}
+            {% for pedido in pending_orders %}
+              
+                <div class="bg-white p-4 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between h-56">
+                    
+                    <div class="flex items-center mb-4">
+                      
+                        <div class="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                            <img src="{% static pedido.imageURL %}" alt="Imagen del Pedido" class="w-full h-full object-cover">
+                        </div>
+                        
+                       
+                        <div class="flex-grow">
+                            <p class="text-sm font-semibold text-gray-600">{{ pedido.orderID }}</p> {# ID smaller #}
+                            <p class="text-lg font-bold text-black mt-1">{{ pedido.customer }}</p> {# Name bold and black #}
+                        </div>
+
+                       
+                        <p class="text-xl font-extrabold text-green-600 ml-auto">{{ pedido.bill }}</p>
+                    </div>
+
+                    
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1 mr-4">
+                            <p class="text-sm text-gray-500">{{ pedido.deliveredAt }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-gray-800">{{ pedido.time }}</p>
+                            <p class="text-sm text-gray-500">{{ pedido.createdAt }}</p>
+                        </div>
+                    </div>
+                    
+                   
+                          
+                    <button class="w-full btn btn-primary mt-auto">Detalles</button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-gray-600 text-center">¡No hay pedidos pendientes en este momento!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
