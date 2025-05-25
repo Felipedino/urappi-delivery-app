@@ -24,7 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home_views.index, name="home"),
     path("", include('urappiapp.urls')),
-    path("", include('app_repartidor.urls'))
+    path("", include('app_repartidor.urls')),
 
 
     path("pedidos/", include('pedidos.urls'))
