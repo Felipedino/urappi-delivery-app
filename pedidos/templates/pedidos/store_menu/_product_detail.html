@@ -1,29 +1,30 @@
 <!-- Este html corresponde a cada cuadro con información del producto en el menú de la tienda-->
 {% load static %}
-<div class="list-row">
+<div class="list-row mb-4">
   <img
     src="{{ producto.imageURL|safe }}"
     alt="{{ producto.ProductName }}"
     width="150px"
+    class="rounded-lg border border-base-300"
   />
-  <div class="">
+  <div>
     <!--Descripción del producto-->
     <div class="textarea-md">
       <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
-      <p class=""> {{ producto.description }}</p>
-      <p class="font-bold"> ${{ producto.priceCLP }}</p>
+      <p>{{ producto.description }}</p>
+      <p class="font-bold text-primary"> ${{ producto.priceCLP }}</p>
     </div>
 
-    <!--Botones para agregar y elegir cantidad del producto-->
-    <div class="flex items-center">
-      <div class="list-row items-center">
-        <button onclick="changeQuantity(-1, '{{ producto.ProductName }}')" class="btn btn-circle">-</button>
-        <input id="quantity-{{ producto.ProductName }}" type="number" style="width: 5ch;" class="input items-center" size="2" value="0" readonly  />
-        <button onclick="changeQuantity(1, '{{ producto.ProductName }}')" class="btn btn-circle">+</button>
+    <!-- Formulario para agregar producto al carrito -->
+    <form method="post" action="{% url 'add_to_cart' %}" class="flex items-center mt-3 space-x-2">
+      {% csrf_token %}
+      <input type="hidden" name="product_name" value="{{ producto.ProductName }}">
+      <div class="flex items-center">
+        <button type="button" onclick="changeQuantity(-1, '{{ counter }}')" class="btn btn-circle">-</button>
+        <input id="quantity-{{ counter }}" name="quantity" type="number" style="width: 5ch;" class="input items-center text-center" size="2" value="1" min="1" readonly />
+        <button type="button" onclick="changeQuantity(1, '{{ counter }}')" class="btn btn-circle">+</button>
       </div>
-
-      <button onclick="" class="btn btn-primary">Agregar</button>
-    </div>  
-    
+      <button type="submit" class="btn btn-primary">Agregar</button>
+    </form>
   </div>
 </div>

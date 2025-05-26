@@ -1,0 +1,43 @@
+{% extends "urappi/base.html" %}
+{% block title %}Carrito - Urappi{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto py-8 px-4">
+    <h2 class="text-3xl font-bold mb-8 text-center text-primary">Tu Carrito</h2>
+
+    {% if cart_items %}
+    <div class="space-y-6">
+        {% for item in cart_items %}
+        <div class="card flex flex-row items-center bg-base-100 shadow-md rounded-xl p-4">
+            <img src="{{ item.product_listing.listedProduct.imageURL }}" alt="{{ item.product_listing.listedProduct.productName }}"
+                 class="w-24 h-24 object-cover rounded-lg mr-6 border border-base-300">
+            <div class="flex-1">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-bold text-base-content">{{ item.product_listing.listedProduct.productName }}</h3>
+                    <span class="text-primary font-semibold text-xl">${{ item.product_listing.listedProduct.priceCLP }}</span>
+                </div>
+                <p class="text-sm text-base-content/70 mt-2">{{ item.product_listing.listedProduct.description }}</p>
+                <div class="flex items-center mt-3 space-x-3">
+                    <span class="badge badge-secondary">Cantidad: {{ item.quantity }}</span>
+                    <span class="text-base-content/70 text-sm">Total: ${{ item.subtotal }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Total general -->
+    <div class="mt-10 flex flex-col items-end">
+        <span class="text-xl font-semibold text-neutral-content">
+            Total: ${{ total_price }}
+        </span>
+        <button class="btn btn-primary mt-4">Proceder al pago</button>
+    </div>
+    {% else %}
+    <div class="flex flex-col items-center justify-center py-20">
+        <p class="text-lg text-gray-500 mb-4">Tu carrito está vacío.</p>
+        <a href="{% url 'home' %}" class="btn btn-accent">Ir a la tienda</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

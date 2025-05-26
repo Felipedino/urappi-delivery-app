@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from urappiapp.models import Shop, ProductListing
+from urappiapp.models import Shop, Product, ProductListing, Cart, CartItem
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 def show_listado_tiendas(request):
     # Aqui se debería hacer una petición a la base de datos
@@ -40,7 +43,7 @@ def show_store_menu(request, id):
             "ProductName": pl.listedProduct.productName,
             "priceCLP": pl.listedProduct.priceCLP,
             "description": pl.listedProduct.description,
-            "imageURL": pl.listedProduct.imageURL
+            "imageURL": pl.listedProduct.imageURL,
         })
         
 
@@ -78,3 +81,34 @@ def show_store_menu(request, id):
     ]
 
     return render(request, 'pedidos/store_menu.html', {"tienda_id": id, "tienda": tienda, "productos": productos})
+
+from urappiapp.models import Product, ProductListing, Cart, CartItem
+
+@login_required(login_url='/login')
+def add_to_cart(request):
+    if request.method == "POST":
+        product_name = request.POST.get("product_name")
+        quantity = int(request.POST.get("quantity", 1))
+
+        try:
+            # Busca el producto por nombre (puede haber riesgo si tienes repetidos)
+            product = Product.objects.get(productName=product_name)
+            # Ahora busca el ProductListing asociado
+            product_listing = ProductListing.objects.get(listedProduct=product)
+        except Product.DoesNotExist:
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+        except ProductListing.DoesNotExist:
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart, product_listing=product_listing,
+            defaults={'quantity': quantity}
+        )
+        if not created:
+            cart_item.quantity += quantity
+            cart_item.save()
+
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        return redirect('/')

@@ -2,8 +2,6 @@
 from django.shortcuts import render
 from urappiapp.models import Shop
 
-
-
 def index(request):
     tiendas = Shop.objects.all()
     
