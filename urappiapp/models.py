@@ -1,48 +1,66 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
+# Modelo de usuario personalizado, extiende AbstractUser para agregar campos extra
 class User(AbstractUser):
-    pronombres = [('La','La'),('El','El'), ('Le','Le'),('Otro','Otro')]
-    pronombre = models.CharField(max_length=5,choices=pronombres)
-    apodo = models.CharField(max_length=30)
+    # Opciones de pronombres para el usuario
+    pronombres = [("La", "La"), ("El", "El"), ("Le", "Le"), ("Otro", "Otro")]
+    pronombre = models.CharField(max_length=5, choices=pronombres)
+    apodo = models.CharField(max_length=30)  # Apodo o nombre visible
 
+
+# Modelo que representa una tienda
 class Shop(models.Model):
-    shopID = models.IntegerField()
-    shopDescription = models.TextField()
-    openTime = models.TimeField()
-    closingTime = models.TimeField()
-    shopName = models.CharField(max_length = 32)
-    imageURL = models.URLField()
-    location = models.TextField()
+    shopID = models.IntegerField()  # ID único de la tienda
+    shopDescription = models.TextField()  # Descripción de la tienda
+    openTime = models.TimeField()  # Hora de apertura
+    closingTime = models.TimeField()  # Hora de cierre
+    shopName = models.CharField(max_length=32)  # Nombre de la tienda
+    imageURL = models.URLField()  # Imagen de la tienda
+    location = models.TextField()  # Ubicación de la tienda
+
     def __str__(self):
         return self.shopName
 
+
+# Modelo que representa un producto
 class Product(models.Model):
-    productID = models.IntegerField()
-    productName = models.CharField(max_length = 32)
-    category = models.CharField(max_length = 32)
-    description = models.TextField()
-    imageURL = models.URLField()
-    priceCLP = models.IntegerField()
+    productID = models.IntegerField()  # ID único del producto
+    productName = models.CharField(max_length=32)  # Nombre del producto
+    category = models.CharField(max_length=32)  # Categoría del producto
+    description = models.TextField()  # Descripción del producto
+    imageURL = models.URLField()  # Imagen del producto
+    priceCLP = models.IntegerField()  # Precio en CLP
+
     def __str__(self):
         return self.productName + str(self.productID)
 
 
+# Relación entre productos y tiendas (stock)
 class ProductListing(models.Model):
-    listedBy = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    listedProduct = models.ForeignKey(Product, on_delete=models.CASCADE)
-    stockQuantity = models.IntegerField()
+    listedBy = models.ForeignKey(
+        Shop, on_delete=models.CASCADE
+    )  # Tienda que lista el producto
+    listedProduct = models.ForeignKey(
+        Product, on_delete=models.CASCADE
+    )  # Producto listado
+    stockQuantity = models.IntegerField()  # Cantidad en stock
+
     def __str__(self):
         return str(self.listedBy) + " " + str(self.listedProduct)
 
-class Order(models.Model):
-    orderID = models.IntegerField()
-    createdAt = models.DateField()
-    deliveredAt = models.DateField()
-    status = models.IntegerField()
 
+# Modelo de orden de compra
+class Order(models.Model):
+    orderID = models.IntegerField()  # ID único de la orden
+    createdAt = models.DateField()  # Fecha de creación
+    deliveredAt = models.DateField()  # Fecha de entrega
+    status = models.IntegerField()  # Estado de la orden (puede ser un enum)
+
+
+# Modelo de entrega (delivery)
 class Delivery(models.Model):
-    deliveryRating = models.FloatField()
-    notes = models.TextField()
-    status = models.IntegerField()
+    deliveryRating = models.FloatField()  # Calificación de la entrega
+    notes = models.TextField()  # Notas adicionales
+    status = models.IntegerField()  # Estado de la entrega (puede ser un enum)
