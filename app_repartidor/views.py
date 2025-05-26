@@ -3,7 +3,7 @@ from django.contrib import messages
 from urappiapp.models import Order
 from django.views.decorators.http import require_POST , require_GET
 
-
+# Se muestran los pedidos en espera por repartir
 def repartidor_perfil(request):
     orders = Order.objects.filter(status = 1)
     
@@ -64,7 +64,7 @@ def accepted_order(request):
     return redirect('order_selected')
 
 
-
+# Se muestra el detalle del pedido seleccionado
 @require_GET
 def order_details(request):
     
