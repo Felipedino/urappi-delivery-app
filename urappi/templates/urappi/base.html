@@ -14,7 +14,9 @@
     </head>
     <body class="h-full flex flex-col">
 
-        {% include 'urappi/header.html' %}
+        {% block header %}
+            {% include 'urappi/header.html' %}
+        {% endblock %}
 
         <main class="flex-grow">
             {% block content %}
