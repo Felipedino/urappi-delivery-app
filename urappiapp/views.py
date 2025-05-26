@@ -1,8 +1,9 @@
+from urappiapp.models import User, Cart, CartItem
+
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
-from urappiapp.models import User
 
 
 # Vista para registrar un nuevo usuario
@@ -60,3 +61,23 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
+
+# Vista para mostrar el carrito
+@login_required(login_url='/login')
+def show_cart(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        items = CartItem.objects.filter(cart=cart).select_related('product_listing__listedProduct', 'product_listing__listedBy')
+    except Cart.DoesNotExist:
+        items = []
+
+    # Añadir el subtotal a cada item
+    for item in items:
+        item.subtotal = item.quantity * item.product_listing.listedProduct.priceCLP
+
+    total_price = sum(item.subtotal for item in items)
+
+    return render(request, 'urappiapp/cart.html', {
+        'cart_items': items,
+        'total_price': total_price
+    })

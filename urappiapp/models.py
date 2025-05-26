@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 from django.db import models
-
 
 # Modelo de usuario personalizado, extiende AbstractUser para agregar campos extra
 class User(AbstractUser):
@@ -64,3 +64,38 @@ class Delivery(models.Model):
     deliveryRating = models.FloatField()  # Calificación de la entrega
     notes = models.TextField()  # Notas adicionales
     status = models.IntegerField()  # Estado de la entrega (puede ser un enum)
+
+# Modelo del carrito
+class Cart(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='cart'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Carrito de {self.user.apodo}'
+
+    def total_items(self):
+        return sum(item.quantity for item in self.items.all())
+
+    def total_price(self):
+        return sum(item.quantity * item.product_listing.listedProduct.priceCLP for item in self.items.all())
+
+# Modelo para el contenido del carrito
+class CartItem(models.Model):
+    cart = models.ForeignKey(
+        Cart, on_delete=models.CASCADE,
+        related_name='items'
+    )
+    product_listing = models.ForeignKey(
+        'ProductListing', on_delete=models.CASCADE,
+        related_name='cart_items'
+    )
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('cart', 'product_listing')
+
+    def __str__(self):
+        return f'{self.quantity} x {self.product_listing.listedProduct.productName}'

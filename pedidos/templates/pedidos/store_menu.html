@@ -1,30 +1,27 @@
-<!--Pagina con menú de la tienda-->
-{% extends 'urappi/base.html' %} 
+<!-- Pagina con menú de la tienda -->
+{% extends 'urappi/base.html' %}
 
-{% block title %}Menú{% endblock %} 
+{% block title %}Menú{% endblock %}
 
 {% block content %}
 <!-- Sección: Información de la tienda -->
 {% include "pedidos/store_menu/_store_info.html" %}
 
-
 <!-- Sección: Listado de productos -->
 <div class="list items-center">
   <ul>
-    {% for producto in productos %} 
-      {% include "pedidos/store_menu/_product_detail.html" %} 
-    {% endfor %}
+      {% for producto in productos %}
+          {% include "pedidos/store_menu/_product_detail.html" with producto=producto counter=forloop.counter %}
+      {% endfor %}
   </ul>
-  
 </div>
 
 <script>
-  function changeQuantity(amount, productName) {
-    const input = document.getElementById(`quantity-${productName}`);
-    let current = parseInt(input.value) || 0;
-    let newValue = Math.max(0, current + amount);
+  function changeQuantity(amount, counter) {
+    const input = document.getElementById(`quantity-${counter}`);
+    let current = parseInt(input.value) || 1;
+    let newValue = Math.max(1, current + amount);
     input.value = newValue;
   }
 </script>
-
 {% endblock content %}
