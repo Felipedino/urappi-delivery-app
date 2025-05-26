@@ -14,34 +14,7 @@
     </head>
     <body class="h-full flex flex-col">
 
-        {% block header %}
-        <header class="bg-gradient-to-r from-primary to-secondary text-white">
-            <!-- header elements -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-                <a href="{% url 'home' %}">
-                    <img src="{% static 'images/logo.png' %}" alt="Urappi Logo" class="h-20 object-contain">
-                </a>
-
-                <nav class="flex space-x-4">
-                {% if user.is_authenticated %}
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-                    <a href="{% url 'logout' %}">Cerrar sesión </a>    
-                </div>
-                {% else %}
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-                    <a href="{% url 'register_user' %}">Registrarse</a>
-                </div>
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-                    <a href="{% url 'login' %}">Iniciar Sesión</a>
-                </div>
-                {% endif %}
-                </nav>
-            </div>
-
-
-        </header>
-        {% endblock %}
-
+        {% include 'urappi/header.html' %}
 
         <main class="flex-grow">
             {% block content %}

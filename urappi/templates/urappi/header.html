@@ -1,0 +1,46 @@
+<header class="bg-gradient-to-r from-primary to-secondary text-white">
+    <!-- header elements -->
+     {% load static %}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+        <a href="{% url 'home' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Urappi Logo" class="h-16 object-contain">
+        </a>
+
+        <nav class="flex items-center space-x-6">
+        {% if user.is_authenticated %}       
+            
+            
+
+            <div class="flex flex-col justify-center justify-between">
+                <h1 class="text-lg font-semibold">Hola, {{ usuario.nombre }}</h1>
+                <p class="text-sm">Tienes ${{ usuario.upuntos }} UPuntos</p>
+            </div>
+
+            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500">
+                <img src="{% static usuario.profilePic %}"  />
+            </div>
+
+            <div>
+                <button class="btn btn-primary">
+                <a href="/#" class="top-menu">Ir al carrito</a>
+                </button>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <a href="{% url 'logout' %}">Cerrar sesión </a>    
+            </div>
+
+            
+        {% else %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <a href="{% url 'register_user' %}">Registrarse</a>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+                <a href="{% url 'login' %}">Iniciar Sesión</a>
+            </div>
+        {% endif %}
+        </nav>
+    </div>
+
+
+</header>
