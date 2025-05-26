@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from urappiapp.models import Shop, ProductListing
+from django.shortcuts import get_object_or_404, render
 
+from urappiapp.models import ProductListing, Shop
+
+
+# Vista que muestra el listado de tiendas
 def show_listado_tiendas(request):
     tiendas = Shop.objects.all()
-    
 
     usuario = {
         "nombre": "Juan Carlos", "upuntos":1000, "profilePic": "pedidos/svg/portrait_placeholder.png"
@@ -11,7 +13,7 @@ def show_listado_tiendas(request):
 
     info = {"usuario": usuario, "tiendas": tiendas}
 
-    return render(request, 'pedidos/stores_view.html', info)
+    return render(request, "pedidos/stores_view.html", info)
 
 
 def show_store_menu(request, id):    

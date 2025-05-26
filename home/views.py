@@ -1,9 +1,9 @@
-# Create your views here.
 from django.shortcuts import render
+
 from urappiapp.models import Shop
 
 
-
+# Vista principal: muestra todas las tiendas
 def index(request):
     tiendas = Shop.objects.all()
     usuario = {
