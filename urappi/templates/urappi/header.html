@@ -7,9 +7,21 @@
         </a>
 
         <nav class="flex items-center space-x-6">
+            <!-- Ícono Carrito -->
+            <a href="{% url 'cart' %}" class="relative group ml-4 flex items-center">
+                <!-- Icono carrito (Heroicon) -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                        class="w-7 h-7 transition"
+                        :class="group-hover:text-red-400 text-white"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-1.293 2.293a1 1 0 00.217 1.32c.286.258.683.386 1.076.293h9.94c.393.093.79-.035 1.076-.293a1 1 0 00.217-1.32L17 13M9 21a1 1 0 102 0 1 1 0 00-2 0zm6 0a1 1 0 102 0 1 1 0 00-2 0z"/>
+                </svg>
+                <!-- Badge de cantidad -->
+                <span class="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center text-white shadow
+                group-hover:bg-red-600 transition">0</span>
+            </a>
         {% if user.is_authenticated %}       
-            
-            
 
             <div class="flex flex-col justify-center justify-between">
                 <h1 class="text-lg font-semibold">Hola, {{ usuario.nombre }}</h1>
@@ -18,12 +30,6 @@
 
             <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-500">
                 <img src="{% static usuario.profilePic %}"  />
-            </div>
-
-            <div>
-                <button class="btn btn-primary">
-                <a href="/#" class="top-menu">Ir al carrito</a>
-                </button>
             </div>
 
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
