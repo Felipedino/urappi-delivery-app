@@ -1,7 +1,18 @@
+from datetime import date
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from urappiapp.models import Cart, CartItem, Product, ProductListing, Shop
+from urappiapp.models import (
+    Cart,
+    CartItem,
+    Order,
+    OrderItem,
+    Product,
+    ProductListing,
+    Shop,
+)
 
 
 # Vista que muestra el listado de tiendas
@@ -144,3 +155,45 @@ def update_cart(request, item_id, action):
 
     # Redireccionar de vuelta al carrito
     return redirect("cart")
+
+
+login_required(login_url="/login")
+
+
+# Vista para crear orden al comprar carrito
+def create_order(request):
+    # Obtener el carrito del usuario
+    cart = Cart.objects.get(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart).select_related(
+        "product_listing", "product_listing__listedProduct"
+    )
+
+    # Obtener la tienda (asumimos que todos los productos son de la misma tienda)
+    shop = cart_items[0].product_listing.listedBy
+
+    # Crear la orden
+    order = Order(
+        customer=request.user,
+        shop=shop,
+        createdAt=date.today(),
+        deliveredAt=None,  # Se establecerá cuando se entregue
+        deliveryLocation=shop.location,
+        status=1,  # 1 = Pendiente
+    )
+    order.save()
+
+    # Crear los items de la orden
+    for item in cart_items:
+        product = item.product_listing.listedProduct
+        OrderItem.objects.create(
+            order=order,
+            product=product,
+            quantity=item.quantity,
+            price=product.priceCLP,
+        )
+
+    # Limpiar el carrito
+    cart_items.delete()
+
+    messages.success(request, "¡Tu orden ha sido enviada correctamente!")
+    return redirect("home")

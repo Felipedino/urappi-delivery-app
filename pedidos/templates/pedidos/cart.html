@@ -61,7 +61,10 @@
         <span class="text-xl font-semibold text-neutral-content">
             Total: ${{ total_price }}
         </span>
-        <button class="btn btn-primary mt-4">Proceder al pago</button>
+        <form method="post" action="{% url 'create_order' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary mt-4">Enviar orden</button>
+        </form>
     </div>
     {% else %}
     <div class="flex flex-col items-center justify-center py-20">
