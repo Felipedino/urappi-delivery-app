@@ -38,49 +38,35 @@ def accepted_order(request):
 
 
 def order_details(request,order_id):
-    ##lógica de búsqueda con order id
-    productos=[ {
-            "ProductName": "Chocolate Trencito",
-            "priceCLP": 3000,
-            "description": "Barra de chocolate de leche",
-            "imageURL":"svg/trencito.avif"
-        },
-        {
-            "ProductName": "Café Capuccino",
-            "priceCLP": 3500,
-            "description": "Café de maquina Marley",
-            "imageURL":"svg/capuccino.jpg"
-
-            
-            }
-        
-        ]
+    
     
 
-    #selected_order = get_object_or_404(Order, orderID = order_id)
+    selected_order = get_object_or_404(Order, orderID = order_id)
+    order_items = selected_order.items.all() 
 
-    #info = {
-     #   'customer': selected_order.customer_name,
-       # 'orderID' :selected_order.orderID,
-        #'product_list': productos,
-        #'deliverAt': selected_order.deliveredAt,
-        # "time" : 19:00,
-        #"createdAt" : selected_order.createdAt
-        #"Status": selected_order.status,
-        #"bill" : "500CLP"
-        #}
+    product_list = []
+    for item in order_items:
+        product_list.append({
+            "productName": item.product.productName, 
+            "priceCLP": item.price,                   
+            "description": item.product.description,  
+            "imageURL": item.product.imageURL,       
+            "quantity": item.quantity                 
+        })
 
-    info ={
-        "orderID":"001",
-            "Status": "Disponible",
-            "customer": "Javiera Gonzalez",
-            "deliverAt": "Cancha -3",
-            "time": "19:00",
-            "createdAt": "La Cafeta",
-            "product_list":productos,
-            "bill": "500CLP"
-            }
-        
+    info = {
+        "orderID": selected_order.orderID,
+        "status": selected_order.status,
+        "customer": selected_order.customer.apodo if selected_order.customer.apodo else selected_order.customer.username, 
+        "location": selected_order.deliveryLocation, 
+        "time": selected_order.createdAt.strftime("%H:%M"), 
+        "createdAt": selected_order.createdAt.strftime("%Y-%m-%d"),
+        "product_list": product_list, 
+        "bill": f"{sum(item.price * item.quantity for item in order_items)}CLP",
+        "shop":  selected_order.shop.shopName
+    }
+
+    
         
          
     return render(request, 'app_repartidor/order_selected.html', info) 
