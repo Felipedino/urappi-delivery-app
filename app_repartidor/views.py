@@ -65,9 +65,8 @@ def accepted_order(request):
 
 
 
-@require_GET
-def order_details(request):
-    
+def order_details(request,order_id):
+    ##lógica de búsqueda con order id
     productos=[ {
             "ProductName": "Chocolate Trencito",
             "priceCLP": 3000,
