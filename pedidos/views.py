@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -175,7 +175,7 @@ def create_order(request):
     order = Order(
         customer=request.user,
         shop=shop,
-        createdAt=date.today(),
+        createdAt=datetime.now(),
         deliveredAt=None,  # Se establecerá cuando se entregue
         deliveryLocation=shop.location,
         status=1,  # 1 = Pendiente
@@ -194,6 +194,8 @@ def create_order(request):
 
     # Limpiar el carrito
     cart_items.delete()
+
+    print("Orden creada:", order.id, order.status)
 
     messages.success(request, "¡Tu orden ha sido enviada correctamente!")
     return redirect("home")
