@@ -1,44 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from urappiapp.models import Order
+from urappiapp.serializers import *
 from django.views.decorators.http import require_POST , require_GET
 
 
 def repartidor_perfil(request):
     orders = Order.objects.filter(status = 1)
-    
     ##usuario = 
 
-    pending_orders =[
-        {
-            "orderID": "001",
-            "customer": "Daniel Cáceres",
-            "deliverAt": "B0120",
-            "time": "11:00",
-            "createdAt": "La Sonia",
-            "bill" : "4000CLP",
-            "imageURL":"svg/user1.webp"
-            },
-            {
-            "orderID": "004",
-            "customer": "Juan Pedro",
-            "deliverAt": "Centro Modelamiento Matemático",
-            "time": "15:00",
-            "createdAt": "La Cafeta",
-            "bill" : "8000CLP",
-            "imageURL":"svg/user2.jpg"
-            },
-            {
-            "orderID": "01234",
-            "customer": "Javiera Gonzalez",
-            "deliverAt": "Cancha -3",
-            "time": "19:00",
-            "createdAt": "La Cafeta",
-            "bill" : "2000CLP",
-            "imageURL":"svg/user3.jpg"
-            },
-
-            ]
+    pending_orders = [OrderSerializer.to_json(order) for order in orders]
+    
     context = {
         'pending_orders': pending_orders
     }

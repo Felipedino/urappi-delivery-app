@@ -53,10 +53,26 @@ class ProductListing(models.Model):
 
 # Modelo de orden de compra
 class Order(models.Model):
-    orderID = models.IntegerField()  # ID único de la orden
+    customer = models.ForeignKey( # Cliente que hace el pedido
+        User, on_delete=models.CASCADE, related_name="customer"
+    )
+    deliverer = models.ForeignKey( # Repartidor que entrega el pedido
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name="deliverer"
+    )
+    shop = models.ForeignKey( # Tienda desde donde se pide el producto
+        Shop, on_delete=models.CASCADE
+    )
+    orderID = models.IntegerField(blank=True, null=True)
     createdAt = models.DateField()  # Fecha de creación
     deliveredAt = models.DateField()  # Fecha de entrega
+    deliveryLocation = models.TextField()
     status = models.IntegerField()  # Estado de la orden (puede ser un enum)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.PositiveIntegerField(default=1)
+    price = models.PositiveIntegerField()  # Precio al momento de la compra
 
 
 # Modelo de entrega (delivery)
