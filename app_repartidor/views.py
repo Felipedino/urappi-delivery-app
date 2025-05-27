@@ -16,7 +16,6 @@ def repartidor_perfil(request):
 
     context = {"pending_orders": pending_orders}
 
-    print("Órdenes pendientes:", orders.count())
     return render(request, "app_repartidor/deliverer.html", context)
 
 
@@ -68,6 +67,5 @@ def order_details(request, order_id):
         "bill": f"{sum(item.price * item.quantity for item in order_items)}CLP",
         "shop": selected_order.shop.shopName,
     }
-    print(selected_order.createdAt)
 
     return render(request, "app_repartidor/order_selected.html", info)

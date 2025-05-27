@@ -195,7 +195,5 @@ def create_order(request):
     # Limpiar el carrito
     cart_items.delete()
 
-    print("Orden creada:", order.id, order.status)
-
     messages.success(request, "¡Tu orden ha sido enviada correctamente!")
     return redirect("home")
