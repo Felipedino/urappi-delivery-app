@@ -1,6 +1,7 @@
-from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 
 # Modelo de usuario personalizado, extiende AbstractUser para agregar campos extra
 class User(AbstractUser):
@@ -53,23 +54,24 @@ class ProductListing(models.Model):
 
 # Modelo de orden de compra
 class Order(models.Model):
-    customer = models.ForeignKey( # Cliente que hace el pedido
+    customer = models.ForeignKey(  # Cliente que hace el pedido
         User, on_delete=models.CASCADE, related_name="customer"
     )
-    deliverer = models.ForeignKey( # Repartidor que entrega el pedido
+    deliverer = models.ForeignKey(  # Repartidor que entrega el pedido
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name="deliverer"
     )
-    shop = models.ForeignKey( # Tienda desde donde se pide el producto
+    shop = models.ForeignKey(  # Tienda desde donde se pide el producto
         Shop, on_delete=models.CASCADE
     )
     orderID = models.IntegerField(blank=True, null=True)
-    createdAt = models.DateField()  # Fecha de creación
-    deliveredAt = models.DateField()  # Fecha de entrega
+    createdAt = models.DateTimeField()  # Fecha de creación
+    deliveredAt = models.DateTimeField(null=True)  # Fecha de entrega
     deliveryLocation = models.TextField()
     status = models.IntegerField()  # Estado de la orden (puede ser un enum)
 
+
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField(default=1)
     price = models.PositiveIntegerField()  # Precio al momento de la compra
@@ -81,37 +83,37 @@ class Delivery(models.Model):
     notes = models.TextField()  # Notas adicionales
     status = models.IntegerField()  # Estado de la entrega (puede ser un enum)
 
+
 # Modelo del carrito
 class Cart(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-        related_name='cart'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="cart"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Carrito de {self.user.apodo}'
+        return f"Carrito de {self.user.apodo}"
 
     def total_items(self):
         return sum(item.quantity for item in self.items.all())
 
     def total_price(self):
-        return sum(item.quantity * item.product_listing.listedProduct.priceCLP for item in self.items.all())
+        return sum(
+            item.quantity * item.product_listing.listedProduct.priceCLP
+            for item in self.items.all()
+        )
+
 
 # Modelo para el contenido del carrito
 class CartItem(models.Model):
-    cart = models.ForeignKey(
-        Cart, on_delete=models.CASCADE,
-        related_name='items'
-    )
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     product_listing = models.ForeignKey(
-        'ProductListing', on_delete=models.CASCADE,
-        related_name='cart_items'
+        "ProductListing", on_delete=models.CASCADE, related_name="cart_items"
     )
     quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
-        unique_together = ('cart', 'product_listing')
+        unique_together = ("cart", "product_listing")
 
     def __str__(self):
-        return f'{self.quantity} x {self.product_listing.listedProduct.productName}'
+        return f"{self.quantity} x {self.product_listing.listedProduct.productName}"
