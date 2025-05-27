@@ -45,7 +45,7 @@ def repartidor_perfil(request):
     
 
 
-    return render(request, 'deliverer.html', context)
+    return render(request, 'app_repartidor/deliverer.html', context)
 
 @require_POST
 def accepted_order(request):
@@ -112,4 +112,4 @@ def order_details(request):
         
         
          
-    return render(request, 'order_selected.html', info) 
+    return render(request, 'app_repartidor/order_selected.html', info) 

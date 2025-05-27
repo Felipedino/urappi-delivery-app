@@ -85,7 +85,12 @@ def show_cart(request):
 
     total_price = sum(item.subtotal for item in items)
 
+    usuario = {
+        "nombre": "Juan Carlos", "upuntos":1000, "profilePic": "pedidos/svg/portrait_placeholder.png"
+    }
+
     return render(request, 'pedidos/cart.html', {
         'cart_items': items,
-        'total_price': total_price
+        'total_price': total_price,
+        'usuario': usuario
     })
