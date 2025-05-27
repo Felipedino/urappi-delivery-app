@@ -93,6 +93,9 @@ En otra terminal, ejecuta:
 ### 3. Acceder a la aplicación
 Abre tu navegador y entra a http://localhost:8000
 
+### 4. Ingresar como administrador (Opcional)
+Ingresa a http://localhost:8000/admin y utiliza los credenciales admin:amongas123
+
 ---
 
 ## Tecnologías Utilizadas
