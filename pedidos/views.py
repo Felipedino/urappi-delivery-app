@@ -69,3 +69,23 @@ def add_to_cart(request):
         return redirect(request.META.get('HTTP_REFERER', '/'))
     else:
         return redirect('/')
+
+# Vista para mostrar el carrito
+@login_required(login_url='/login')
+def show_cart(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        items = CartItem.objects.filter(cart=cart).select_related('product_listing__listedProduct', 'product_listing__listedBy')
+    except Cart.DoesNotExist:
+        items = []
+
+    # Añadir el subtotal a cada item
+    for item in items:
+        item.subtotal = item.quantity * item.product_listing.listedProduct.priceCLP
+
+    total_price = sum(item.subtotal for item in items)
+
+    return render(request, 'pedidos/cart.html', {
+        'cart_items': items,
+        'total_price': total_price
+    })
