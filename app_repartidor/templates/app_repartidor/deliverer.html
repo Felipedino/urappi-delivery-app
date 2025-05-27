@@ -69,8 +69,10 @@
                     
                    
                           
-                    <button class="w-full btn btn-primary mt-auto">Detalles</button>
-                </div>
+            <a href="{% url 'app_repartidor:order_selected' order_id=pedido.orderID %}">
+                                <button class="w-full btn btn-primary mt-auto">Detalles</button>
+                    </a>             
+                       </div>
             {% endfor %}
         {% else %}
             <p class="text-gray-600 text-center">¡No hay pedidos pendientes en este momento!</p>
