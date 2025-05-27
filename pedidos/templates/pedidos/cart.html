@@ -17,8 +17,38 @@
                     <span class="text-primary font-semibold text-xl">${{ item.product_listing.listedProduct.priceCLP }}</span>
                 </div>
                 <p class="text-sm text-base-content/70 mt-2">{{ item.product_listing.listedProduct.description }}</p>
-                <div class="flex items-center mt-3 space-x-3">
-                    <span class="badge badge-secondary">Cantidad: {{ item.quantity }}</span>
+                
+                <div class="flex items-center mt-3 justify-between">
+                    <!-- Control de cantidad -->
+                    <div class="flex items-center gap-4">
+                        <!-- Join para agrupar los botones de cantidad -->
+                        <div class="join bg-base-200 rounded-lg">
+                            <form method="post" action="{% url 'update_cart' item.id 'decrease' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="join-item btn btn-sm btn-ghost">-</button>
+                            </form>
+                            
+                            <div class="join-item flex items-center justify-center px-4 font-medium">
+                                {{ item.quantity }}
+                            </div>
+                            
+                            <form method="post" action="{% url 'update_cart' item.id 'increase' %}">
+                                {% csrf_token %}
+                                <button type="submit" class="join-item btn btn-sm btn-ghost">+</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Botón de eliminar -->
+                        <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-ghost btn-sm text-error">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                    
                     <span class="text-base-content/70 text-sm">Total: ${{ item.subtotal }}</span>
                 </div>
             </div>
