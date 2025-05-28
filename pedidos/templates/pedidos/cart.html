@@ -61,6 +61,11 @@
         <span class="text-xl font-semibold text-neutral-content">
             Total: ${{ total_price }}
         </span>
+        <div class="max-w-3xl mx-auto py-4 px-4 flex justify-end">
+            <div class="text-right">
+                <span class="text-lg font-bold text-primary">Total de la orden: ${{ total_price }}</span>
+            </div>
+        </div>
         <form method="post" action="{% url 'create_order' %}">
             {% csrf_token %}
             <button type="submit" class="btn btn-primary mt-4">Enviar orden</button>
@@ -73,4 +78,5 @@
     </div>
     {% endif %}
 </div>
+
 {% endblock %}
