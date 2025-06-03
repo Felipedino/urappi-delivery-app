@@ -21,12 +21,12 @@ def show_listado_tiendas(request):
     usuario = {
         "nombre": "Juan Carlos",
         "upuntos": 1000,
-        "profilePic": "pedidos/svg/portrait_placeholder.png",
+        "profilePic": "app_comprador/svg/portrait_placeholder.png",
     }
 
     info = {"usuario": usuario, "tiendas": tiendas}
 
-    return render(request, "pedidos/stores_view.html", info)
+    return render(request, "app_comprador/stores_view.html", info)
 
 
 def show_store_menu(request, id):
@@ -48,7 +48,7 @@ def show_store_menu(request, id):
     usuario = {
         "nombre": "Juan Carlos",
         "upuntos": 1000,
-        "profilePic": "pedidos/svg/portrait_placeholder.png",
+        "profilePic": "app_comprador/svg/portrait_placeholder.png",
     }
 
     info = {
@@ -58,7 +58,7 @@ def show_store_menu(request, id):
         "usuario": usuario,
     }
 
-    return render(request, "pedidos/store_menu.html", info)
+    return render(request, "app_comprador/store_menu.html", info)
 
 
 # Vista para añadir objetos al carrito
@@ -111,12 +111,12 @@ def show_cart(request):
     usuario = {
         "nombre": "Juan Carlos",
         "upuntos": 1000,
-        "profilePic": "pedidos/svg/portrait_placeholder.png",
+        "profilePic": "app_comprador/svg/portrait_placeholder.png",
     }
 
     return render(
         request,
-        "pedidos/cart.html",
+        "app_comprador/cart.html",
         {"cart_items": items, "total_price": total_price, "usuario": usuario},
     )
 

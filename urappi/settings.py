@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "urappiapp",
-    "pedidos",
+    "app_comprador",
     "app_repartidor"
 ]
 
