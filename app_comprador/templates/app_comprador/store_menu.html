@@ -5,13 +5,13 @@
 
 {% block content %}
 <!-- Sección: Información de la tienda -->
-{% include "pedidos/store_menu/_store_info.html" %}
+{% include "app_comprador/store_menu/_store_info.html" %}
 
 <!-- Sección: Listado de productos -->
 <div class="list items-center">
   <ul>
       {% for producto in productos %}
-          {% include "pedidos/store_menu/_product_detail.html" with producto=producto counter=forloop.counter %}
+          {% include "app_comprador/store_menu/_product_detail.html" with producto=producto counter=forloop.counter %}
       {% endfor %}
   </ul>
 </div>

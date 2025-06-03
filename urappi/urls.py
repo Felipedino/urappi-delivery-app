@@ -25,5 +25,5 @@ urlpatterns = [
     path("", home_views.index, name="home"),
     path("", include('urappiapp.urls')),
     path("", include('app_repartidor.urls')),
-    path("comprador/", include('pedidos.urls'))
+    path("comprador/", include('app_comprador.urls'))
 ]
