@@ -1,0 +1,36 @@
+<!-- Este html corresponde a cada cuadro con información del producto en el menú de la tienda-->
+{% load static %}
+<div class="list-row items-center">
+  <div class="list-row mb-4">
+    <img
+      src="{{ producto.imageURL|safe }}"
+      alt="{{ producto.ProductName }}"
+      width="150px"
+      class="rounded-lg border border-base-300"
+    />
+    <div>
+      <!--Descripción del producto-->
+      <div class="textarea-md">
+        <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
+        <p>{{ producto.description }}</p>
+        <p class="font-bold text-primary"> ${{ producto.priceCLP }}</p>
+      </div>
+
+      <form method="post" action="{% url 'add_to_cart' %}" class="flex items-center mt-3 space-x-2">
+        {% csrf_token %}
+        <input type="hidden" name="product_name" value="{{ producto.ProductName }}">
+        
+      </form>    
+    </div>
+  </div>
+  <!--Queda por implementar este botón-->
+  <div class="">
+      <button type="submit" class="btn btn-primary" onclick="modifyProduct()">Editar producto</button>
+  </div>
+</div>
+
+<script>
+  function modifyProduct(id_product){
+
+  }
+</script>
