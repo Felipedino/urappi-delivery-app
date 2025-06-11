@@ -32,7 +32,7 @@
           <label class="label" for="rol">
             <span class="label-text">Pronombres</span>
           </label>
-          <select id="pronombrre" name="pronombre" class="select select-bordered select-primary w-full" required>
+          <select id="pronombre" name="pronombre" class="select select-bordered select-primary w-full" required>
             <option disabled selected value="">Escoge tus pronombres</option>
             <option value="El">El</option>
             <option value="La">La</option>
@@ -59,12 +59,22 @@
           <label class="label" for="rol">
             <span class="label-text">Rol</span>
           </label>
-          <select id="rol" name="rol" class="select select-bordered select-primary w-full" required>
+
+          <select id="rol" name="rol" class="select select-bordered select-primary w-full" required onchange="showTiendaInput()">
             <option disabled selected value="">Selecciona un rol</option>
             <option value="customer">Cliente</option>
             <option value="deliver">Repartidor</option>
+            <option value="seller">Vendedor</option>
           </select>
         </div>
+        
+        <div class="form-control mb-4" style="display: none;" id="tiendaInput">
+          <label class="label" for="nombre_tienda">
+          <span class="label-text">Nombre de su tienda</span>
+        </label>
+        <input type="text" id="nombre_tienda" name="nombre-tienda" class="input input-bordered input-primary w-full" required />
+        </div>
+       
         <div class="form-control mt-6">
           <button type="submit" class="btn btn-primary w-full">Crear usuario</button>
         </div>
@@ -77,6 +87,22 @@
     </div>
   </div>
 </div>
+
+<script>
+  function showTiendaInput() {
+    const rol = document.getElementById("rol").value;
+    const tiendaInput = document.getElementById("tiendaInput");
+
+    if (rol === "seller") {
+      tiendaInput.style.display = "block";
+    } else {
+      tiendaInput.style.display = "none";
+    }
+  }
+
+  // Ejecutar al cargar si hay un valor preseleccionado
+  window.addEventListener("DOMContentLoaded", showTiendaInput);
+</script>
 
 
 {% endblock %}
