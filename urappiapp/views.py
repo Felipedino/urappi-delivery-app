@@ -22,7 +22,6 @@ def register_user(request):
         apodo = request.POST["apodo"]
         pronombre = request.POST["pronombre"]
         mail = request.POST["mail"]
-        tipo = request.POST["rol"]
 
         # Crea el nuevo usuario con los datos proporcionados
         user = User.objects.create_user(
