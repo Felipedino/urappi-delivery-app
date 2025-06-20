@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 
+# Agregamos los urls de las vistas dentro de la lógica repartidor.
 app_name = 'app_repartidor'
 urlpatterns = [
     path('deliverer/', views.repartidor_perfil, name='repartidor_perfil'),

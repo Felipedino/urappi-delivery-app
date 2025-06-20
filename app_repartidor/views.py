@@ -7,7 +7,7 @@ from django.views.decorators.http import require_GET, require_POST
 from urappiapp.models import Order
 from urappiapp.serializers import *
 
-
+## Renderizamos páginas para repartidores, con órdenes pendientes
 def repartidor_perfil(request):
     orders = Order.objects.filter(status=1)
     ##usuario =
@@ -18,7 +18,7 @@ def repartidor_perfil(request):
 
     return render(request, "app_repartidor/deliverer.html", context)
 
-
+##Lógica para aceptar una orden y cambiar su estatus.
 @require_POST
 def accepted_order(request):
     id = request.POST.get("order_id")
@@ -35,12 +35,13 @@ def accepted_order(request):
         messages.error(request, f"Error en ID pedido")
     return redirect("order_selected")
 
-
+##Renderizar una página con más detalles sobre las ordenes pendientes
 def order_details(request, order_id):
     ##lógica de búsqueda con order id
 
     selected_order = get_object_or_404(Order, id=order_id)
     order_items = OrderItem.objects.filter(order__id=order_id)
+    #Producto elegidos por el cliente
     product_list = [
         {
             "productName": item.product.productName,
@@ -51,6 +52,7 @@ def order_details(request, order_id):
         }
         for item in order_items
     ]
+    #información a desplegar en la vista de detalles de orden
 
     info = {
         "orderID": selected_order.id,
