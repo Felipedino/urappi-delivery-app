@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "urappiapp",
     "app_comprador",
-    "app_repartidor"
+    "app_repartidor",
+    "app_vendedor",
 ]
 
 MIDDLEWARE = [

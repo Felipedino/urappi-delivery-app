@@ -1,0 +1,15 @@
+{% extends 'urappi/base.html' %}
+
+{% block content %}
+
+{% include "app_vendedor/store_menu/_store_info.html" %}
+
+<div class="list items-center">
+  <ul>
+      {% for producto in productos %}
+          {% include "app_vendedor/store_menu/_product_detail.html" with producto=producto counter=forloop.counter %}
+      {% endfor %}
+  </ul>
+</div>
+
+{% endblock content %}
