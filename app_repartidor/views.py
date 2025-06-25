@@ -18,22 +18,43 @@ def repartidor_perfil(request):
 
     return render(request, "app_repartidor/deliverer.html", context)
 
-##Lógica para aceptar una orden y cambiar su estatus.
+##Lógica para aceptar una orden, cambiar su estatus y redireccionar a html de detalles.
+
 @require_POST
 def accepted_order(request):
-    id = request.POST.get("order_id")
-    if id:
-        try:
-            order_to_be_modified = get_object_or_404(Order, orderID=id)
+    order_id = request.POST.get("order_id")
+    action = request.POST.get("action")
+    
+    if not order_id:
+        messages.error(request, "Error: ID de pedido no encontrado")
+        return redirect("app_repartidor:repartidor_perfil")
+    
+    if not action:
+        messages.error(request, "Error: Acción no especificada")
+        return redirect("app_repartidor:repartidor_perfil")
+    
+    try:
+        order_to_be_modified = get_object_or_404(Order, id=order_id)        
+        if action == "accept":
+            order_to_be_modified.status = 2  # Estado aceptado
+            order_to_be_modified.save()
+            messages.success(request, "Pedido aceptado con éxito")
+            return redirect('app_repartidor:estado_order', order_id=order_id)
+            
+        elif action == "reject":
             order_to_be_modified.status = 1
             order_to_be_modified.save()
-            messages.success(request, f"Pedido aceptado con éxito")
-            return redirect("deliverer")
-        except:
-            messages.error(request, f"Error al aceptar el pedido: {Exception}")
-    else:
-        messages.error(request, f"Error en ID pedido")
-    return redirect("order_selected")
+            messages.success(request, "Pedido rechazado")
+            return redirect("app_repartidor:repartidor_perfil")
+            
+        else:
+            messages.error(request, f"Acción no válida: {action}")
+            return redirect("app_repartidor:repartidor_perfil")
+            
+    except Exception as e:
+        messages.error(request, f"Error al procesar el pedido: {str(e)}")
+    
+    return redirect("app_repartidor:repartidor_perfil")
 
 ##Renderizar una página con más detalles sobre las ordenes pendientes
 def order_details(request, order_id):
@@ -71,3 +92,38 @@ def order_details(request, order_id):
     }
 
     return render(request, "app_repartidor/order_selected.html", info)
+
+# Renderizar página de resumen de la orden para el repartidor
+def estado_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)  # 
+    return render(request, 'app_repartidor/estado_order.html', {'order': order})
+
+#Manejar entrega de pedido
+@require_POST
+def delivery_action(request):
+    order_id = request.POST.get("order_id")
+    print("ID??? ::", order_id)
+    action = request.POST.get("action")
+    
+    if not order_id or not action:
+        messages.error(request, "Error: Datos incompletos")
+        return redirect("app_repartidor:repartidor_perfil")
+    
+    try:
+        order = get_object_or_404(Order, id=order_id)
+        
+        if action == "accept":
+            order.status = 3  # Estado entregado
+            order.save()
+            messages.success(request, "Pedido marcado como entregado")
+            
+        elif action == "reject":
+            order.status = 1  # Estado en espera
+            order.save()
+            messages.success(request, "Entrega cancelada")
+            
+        return redirect("app_repartidor:repartidor_perfil")
+        
+    except Exception as e:
+        messages.error(request, f"Error al procesar la acción: {str(e)}")
+        return redirect("app_repartidor:repartidor_perfil")
