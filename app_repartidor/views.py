@@ -10,8 +10,7 @@ from urappiapp.serializers import *
 ## Renderizamos páginas para repartidores, con órdenes pendientes
 def repartidor_perfil(request):
     orders = Order.objects.filter(status=1)
-    ##usuario =
-
+    #Desplegar las ordenes pendientes
     pending_orders = [OrderSerializer.to_json(order) for order in orders]
 
     context = {"pending_orders": pending_orders}
@@ -25,22 +24,28 @@ def accepted_order(request):
     order_id = request.POST.get("order_id")
     action = request.POST.get("action")
     
+    #manejar error de id inválida
     if not order_id:
         messages.error(request, "Error: ID de pedido no encontrado")
         return redirect("app_repartidor:repartidor_perfil")
     
+    #manejar error sin acción generada (buttons)
     if not action:
         messages.error(request, "Error: Acción no especificada")
         return redirect("app_repartidor:repartidor_perfil")
     
     try:
-        order_to_be_modified = get_object_or_404(Order, id=order_id)        
+        #Lógica para modificar la orden según acción
+        order_to_be_modified = get_object_or_404(Order, id=order_id)    
+        #Si se acepta, cambiar estatus del pedido     
         if action == "accept":
             order_to_be_modified.status = 2  # Estado aceptado
             order_to_be_modified.save()
             messages.success(request, "Pedido aceptado con éxito")
             return redirect('app_repartidor:estado_order', order_id=order_id)
-            
+        
+        #Si se rechaza, mantener estatus del pedido     
+
         elif action == "reject":
             order_to_be_modified.status = 1
             order_to_be_modified.save()
@@ -56,7 +61,7 @@ def accepted_order(request):
     
     return redirect("app_repartidor:repartidor_perfil")
 
-##Renderizar una página con más detalles sobre las ordenes pendientes
+##Renderizar una página con más detalles sobre las órdenes pendientes
 def order_details(request, order_id):
     ##lógica de búsqueda con order id
 
@@ -98,25 +103,30 @@ def estado_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)  # 
     return render(request, 'app_repartidor/estado_order.html', {'order': order})
 
-#Manejar entrega de pedido
+#Lógica de  entrega de pedido por el repartidor
 @require_POST
 def delivery_action(request):
     order_id = request.POST.get("order_id")
-    print("ID??? ::", order_id)
+    print("ID recibido :", order_id)
     action = request.POST.get("action")
-    
+    #Manejar errores de id y acción por parte del repartidor
     if not order_id or not action:
         messages.error(request, "Error: Datos incompletos")
         return redirect("app_repartidor:repartidor_perfil")
     
     try:
+        #Lógica para modificar la orden según acción del repartidor.
         order = get_object_or_404(Order, id=order_id)
         
+        #Si entrega, estatus del pedido será Entregado(3)
         if action == "accept":
             order.status = 3  # Estado entregado
             order.save()
             messages.success(request, "Pedido marcado como entregado")
-            
+        
+        
+        #Si no entrega, estatus del pedido vuelve a pendiente, podría haber cola de prioridad.
+    
         elif action == "reject":
             order.status = 1  # Estado en espera
             order.save()
