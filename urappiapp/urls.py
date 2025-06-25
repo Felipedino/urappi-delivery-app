@@ -6,9 +6,9 @@ urlpatterns = [
     path('login',views.login_user, name='login'),
     path('logout',views.logout_user, name='logout'),
    
-    path('comprador/', views.customer_home, name='comprador'),
+    path('comprador/', views.comprador, name='comprador'),
     path('repartidor/', views.repartidor_perfil, name='repartidor'),  
-    path('vendedor/', views.seller_home, name='vendedor'),
+    path('vendedor/', views.vendedor, name='vendedor'),
     
 
 ]
