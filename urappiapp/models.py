@@ -9,7 +9,11 @@ class User(AbstractUser):
     pronombres = [("La", "La"), ("El", "El"), ("Le", "Le"), ("Otro", "Otro")]
     pronombre = models.CharField(max_length=5, choices=pronombres)
     apodo = models.CharField(max_length=30)  # Apodo o nombre visible
-
+    #rol = models.CharField(max_length=20, choices=[
+    #    ('customer', 'Cliente'),
+     #   ('deliver', 'Repartidor'),
+      #  ('seller', 'Vendedor'),
+    #])
 
 # Modelo que representa una tienda
 class Shop(models.Model):
