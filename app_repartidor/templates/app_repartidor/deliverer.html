@@ -4,31 +4,6 @@
 
 
 
-{% block header %}
-<header class="relative bg-gray-200 p-4 shadow-md flex justify-between items-center h-24">
-    
-    <div class="flex items-center">
-      
-        <div class="flex flex-col items-center mr-4">
-          
-            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-500"> 
-                <img src="{% static '/svg/user.png' %}" alt="Foto de perfil" class="w-full h-full object-cover">
-            </div>
-
-           
-            <input type="checkbox" class="toggle toggle-success mt-[-10px]" id="switch-label">
-    
-        </div>
-
-      
-        <h1 class="text-2xl font-bold text-gray-800">Pepito</h1>
-    </div>
-
-    
-    <div class="text-xl font-extrabold text-black">500PTS</div>
-</header>
-{% endblock header %}
-
 
 {% block content %}
 <div class="main-content-pedidos container mx-auto px-4 py-8"> 

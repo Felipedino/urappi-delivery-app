@@ -78,8 +78,18 @@
             <p class="text-lg text-gray-700 mb-2">Hora: <span class="font-bold text-gray-900">{{ time }}</span></p>
             <p class="text-lg text-gray-700 mb-2">Tienda: <span class="font-bold text-gray-900">{{ shop }}</span></p>
             <p class="text-3xl font-extrabold text-black mt-6">Total: {{ bill }}</p> 
-            <button type="submit"class="w-full btn btn-primary mt-auto">Aceptar pedido</button>
-        </div>
+        <form method="post" action="{% url 'app_repartidor:accepted_order' %}" class="w-full">
+                        {% csrf_token %} 
+                        <input type="hidden" name="order_id" value="{{ orderID }}">
+
+                        <div class="flex gap-2 mt-auto"> 
+                            <button type="submit" name="action" value="accept" class="flex-1 btn btn-primary">Aceptar pedido</button>
+                            <button type="submit" name="action" value="reject" class="flex-1 btn btn-danger">Rechazar pedido</button>
+                        </div>
+                    </form>  
+                    
+                    
+                        </div>
 
     </div>
 

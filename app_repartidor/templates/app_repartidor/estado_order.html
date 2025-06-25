@@ -1,0 +1,83 @@
+{% extends 'urappi/base.html' %}
+{% load static %}
+
+{% block title %}Estado de la Orden{% endblock title %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex justify-center mb-6 bg-green-100 border-l-4 border-green-500 p-4 mb-6">
+            <h1 class="text-2xl font-bold text-green-800">¡Pedido Aceptado!</h1>
+        </div> 
+          <div class="flex justify-center mb-6"> 
+                <img src="{% static 'svg/cafecito_repartidor.gif' %}" alt="Repartidor animado" width="300">
+            </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Detalles de la Orden</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-3 rounded">
+                    <span class="text-sm font-medium text-gray-600">ID de Orden:</span>
+                    <p class="text-lg font-semibold text-gray-900">{{ order.id }}</p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded">
+                    <span class="text-sm font-medium text-gray-600">Cliente:</span>
+                    <p class="text-lg font-semibold text-gray-900">
+                        {% if order.customer.apodo %}
+                            {{ order.customer.apodo }}
+                        {% else %}
+                            {{ order.customer.username }}
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded">
+                    <span class="text-sm font-medium text-gray-600">Tienda:</span>
+                    <p class="text-lg font-semibold text-gray-900">{{ order.shop.shopName }}</p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded">
+                    <span class="text-sm font-medium text-gray-600">Estado:</span>
+                    <p class="text-lg font-semibold text-green-600">
+                        {% if order.status == 2 %}
+                            Aceptado
+
+                        {% elif order.status == 3 %}
+                            Entregado
+                        {% else %}
+                            En espera
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded">
+                    <span class="text-sm font-medium text-gray-600">Fecha de pedido:</span>
+                    <p class="text-lg font-semibold text-gray-900">{{ order.createdAt|date:"d/m/Y H:i" }}</p>
+                </div>
+
+                <div class="bg-gray-50 p-3 rounded">
+                    <span class="text-sm font-medium text-gray-600">Ubicación de entrega:</span>
+                    <p class="text-lg font-semibold text-gray-900">{{ order.deliveryLocation }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            
+            <form method="post" action="{% url 'app_repartidor:delivery_action' %}" class="w-full">
+                        {% csrf_token %} 
+                        <input type="hidden" name="order_id" value="{{ order.id }}">
+
+                        <div class="flex gap-2 mt-auto"> 
+                            <button type="submit" name="action" value="accept" class="flex-1 btn btn-primary">Pedido Entregado</button>
+                            <button type="submit" name="action" value="reject" class="flex-1 btn btn-danger">Cancelar Entrega</button>
+                        </div>
+                    </form>  
+                    
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
