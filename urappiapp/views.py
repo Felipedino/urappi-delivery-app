@@ -1,4 +1,4 @@
-from urappiapp.models import User, Cart, CartItem
+from urappiapp.models import User, Cart, CartItem, ShopOwner, Shop
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -21,7 +21,7 @@ def register_user(request):
 
     elif request.method == "POST":
         # Obtiene los datos del formulario de registro
-        nombre = request.POST["nombre"]
+        nombre = request.POST["nombre_usuario"]
         contraseña = request.POST["contraseña"]
         apodo = request.POST["apodo"]
         pronombre = request.POST["pronombre"]
@@ -41,6 +41,16 @@ def register_user(request):
         print(f"- Username: {user.username}")
         print(f"- Rol asignado: {user.rol}")
         print(f"- Apodo: {user.apodo}")
+
+        if rol == "seller":
+            # Por ahora basta un nombre para registar una tienda
+            shopName = request.POST["nombre_tienda"]
+            openTime = request.POST["hora_apertura"]
+            closeTime = request.POST["hora_cierre"]
+            shop = Shop.objects.create(shopName=shopName, openTime=openTime, closingTime=closeTime)
+            owner = ShopOwner.objects.create(owner = user, shop=shop) # Se signa como dueño de la tienda creada
+        
+
         return render(request, "urappiapp/register_user.html")
 
 
@@ -73,6 +83,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
+
 #-----------------------------------------redirigir según rol-----------------------------------------------
 def redirect_by_role(request,user):
     """Redirige al usuario según su rol"""
@@ -88,6 +99,7 @@ def redirect_by_role(request,user):
         # Rol no válido, redirigir a página general con mensaje
         messages.warning(request, f"Rol no reconocido: {rol}")
         return HttpResponseRedirect(reverse('home'))
+    
 #------------------------------------------------Vistas según rol-----------------------------------------
 #Vista para el comprador
 def comprador(request):

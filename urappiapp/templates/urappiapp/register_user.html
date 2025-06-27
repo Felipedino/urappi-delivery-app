@@ -18,21 +18,21 @@
           <label class="label" for="nombre_usuario">
             <span class="label-text">Nombre</span>
           </label>
-          <input type="text" id="nombre_usuario" name="nombre" class="input input-bordered input-primary w-full" required />
+          <input type="text" id="nombre_usuario" name="nombre_usuario" class="input input-bordered input-primary w-full" required />
         </div>
 
         <div class="form-control mb-4">
-          <label class="label" for="nombre_usuario">
+          <label class="label" for="apodo">
             <span class="label-text">Apodo</span>
           </label>
           <input type="text" id="apodo" name="apodo" class="input input-bordered input-primary w-full" required />
         </div>
 
         <div class="form-control mb-4">
-          <label class="label" for="rol">
+          <label class="label" for="pronombre">
             <span class="label-text">Pronombres</span>
           </label>
-          <select id="pronombrre" name="pronombre" class="select select-bordered select-primary w-full" required>
+          <select id="pronombre" name="pronombre" class="select select-bordered select-primary w-full" required>
             <option disabled selected value="">Escoge tus pronombres</option>
             <option value="El">El</option>
             <option value="La">La</option>
@@ -67,12 +67,29 @@
           </select>
         </div>
 
-        <div class="form-control mb-4" style="display: none;" id="tiendaInput">
-          <label class="label" for="nombre_tienda">
-            <span class="label-text">Nombre de su tienda</span>
-          </label>
-          <input type="text" id="nombre_tienda" name="nombre_tienda" class="input input-bordered input-primary w-full" />
+        <div style="display: none;" id="tiendaInput">
+          <div class="form-control mb-4" >
+            <label class="label" for="nombre_tienda">
+              <span class="label-text">Nombre de su tienda</span>
+            </label>
+            <input type="text" id="nombre_tienda" name="nombre_tienda" class="input input-bordered input-primary w-full" required />
+          </div>
+
+          <div class="form-control mb-4">
+            <label class="label" for="hora_apertura">
+              <span class="label-text">Hora de apertura</span>
+            </label>
+            <input type="time" id="hora_apertura" name="hora_apertura" class="input time w-full" required />
+          </div>
+
+          <div class="form-control mb-4">
+            <label class="label" for="hora_cierre">
+              <span class="label-text">Hora de cierre</span>
+            </label>
+            <input type="time" id="hora_cierre" name="hora_cierre" class="input time w-full" required />
+          </div>
         </div>
+        
 
 
         <div class="form-control mt-6">

@@ -9,16 +9,16 @@ class User(AbstractUser):
     pronombres = [("La", "La"), ("El", "El"), ("Le", "Le"), ("Otro", "Otro")]
     pronombre = models.CharField(max_length=5, choices=pronombres)
     apodo = models.CharField(max_length=30)  # Apodo o nombre visible
-    ROLES = [
+
+    rol = models.CharField(max_length=20, choices=[
         ('customer', 'Cliente'),
-        ('deliver', 'Repartidor'), 
+        ('deliver', 'Repartidor'),
         ('seller', 'Vendedor'),
-    ]
-    rol = models.CharField(max_length=20, choices=ROLES, default='customer')
+    ])
 
 # Modelo que representa una tienda
 class Shop(models.Model):
-    shopID = models.IntegerField()  # ID único de la tienda
+    shopID = models.AutoField(primary_key=True)  # ID único de la tienda
     shopDescription = models.TextField()  # Descripción de la tienda
     openTime = models.TimeField()  # Hora de apertura
     closingTime = models.TimeField()  # Hora de cierre
@@ -29,14 +29,20 @@ class Shop(models.Model):
     def __str__(self):
         return self.shopName
 
+# Relación entre tiendas y sus dueños
+class ShopOwner(models.Model):
+    owner = models.ForeignKey( User, on_delete=models.CASCADE)  # Usuario dueño de la tienda
+    shop = models.ForeignKey( Shop, on_delete=models.CASCADE ) 
+
 
 # Modelo que representa un producto
 class Product(models.Model):
-    productID = models.IntegerField()  # ID único del producto
+    categorys = [("beb-cal", "Bebidas calientes"), ("beb-fria", "Bebidas frías"), ("pas-boll", "Pastelería y Bollería"), ("sandw", "Sandwiches"), ("otro", "Otro")]
+    productID = models.AutoField(primary_key=True)
     productName = models.CharField(max_length=32)  # Nombre del producto
-    category = models.CharField(max_length=32)  # Categoría del producto
+    category = models.CharField(max_length=32, choices=categorys)  # Categoría del producto
     description = models.TextField()  # Descripción del producto
-    imageURL = models.URLField()  # Imagen del producto
+    prodImage = models.ImageField(upload_to="products/", null=True, blank=True)  # Imagen del producto
     priceCLP = models.IntegerField()  # Precio en CLP
 
     def __str__(self):
