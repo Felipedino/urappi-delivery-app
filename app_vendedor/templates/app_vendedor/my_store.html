@@ -10,6 +10,86 @@
           {% include "app_vendedor/store_menu/_product_detail.html" with producto=producto counter=forloop.counter %}
       {% endfor %}
   </ul>
+
+  
+  <div>
+    <button type="button" onclick="toggleProductoNuevo()" class="btn btn-primary w-full">Agregar un nuevo producto</button>
+  </div>
+
+
+  <div style="display: none;" id="agregar_producto">
+    <form method="post" action="{% url 'app_vendedor:addNewProduct' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-control mt-6">
+        <label class="label" for="tip_producto">
+            <span class="label-text">Tipo del producto</span>
+        </label>
+        <select id="tipo_prod" name="tipo_prod" class="select select-bordered select-primary w-full" required>
+            <option disabled selected value="">Escoge el tipo de producto</option>
+            <option value="beb-cal">Bebidas calientes</option>
+            <option value="beb-fria">Bebidas frías</option>
+            <option value="pas-boll">Pastelería y Bollería</option>
+             <option value="sandw">Sandwiches</option>
+            <option value="otro">Otro</option>
+          </select>
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="nombre_producto">
+            <span class="label-text">Nombre del producto</span>
+        </label>
+        <input type="text" id="nombre_producto" name="nombre_producto" class="input input-bordered input-primary w-full" placeholder="Completo italiano" required/>
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="valor_producto">
+            <span class="label-text">Precio unitario (CLP)</span>
+        </label>
+        <input type="text" id="valor_producto" name="valor_producto" class="input input-primary w-full" placeholder="$1.500" inputmode="numeric" required />
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="stock_producto">
+            <span class="label-text">Stock disponible</span>
+        </label>
+        <input type="number" id="stock_producto" name="stock_producto" class="input input-primary w-full" placeholder="10" inputmode="numeric" required />
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="descr_producto">
+            <span class="label-text">Descripción del producto</span>
+        </label>
+        <textarea type="text" id="descr_producto" name="descr_producto" class="input textarea" placeholder="Salchicha, palta hass, tomate y mayo casera."></textarea>
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="foto_producto">
+            <span class="label-text">Foto del producto</span>
+        </label>
+        <input type="file" id="foto_producto" name="foto_producto" accept="image/png, image/jpeg" class="file-input" required/>
+      </div>
+
+      <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary w-full">Agregar producto</button>
+      </div>
+    </form>
+  </div>
 </div>
 
+<script>
+  function toggleProductoNuevo() {
+    const productoNuevo = document.getElementById("agregar_producto");
+    productoNuevo.style.display = "block";
+    
+    setTimeout(() => {
+      agregar_producto.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  }
+  document.getElementById('valor_producto').addEventListener('input', function (e) {
+    let value = e.target.value.replace(/\D/g, ''); // quitar todo lo que no sea dígito
+    value = new Intl.NumberFormat('es-CL').format(value);
+    e.target.value = '$' + value;
+  });
+</script>
 {% endblock content %}
+

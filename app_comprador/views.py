@@ -31,17 +31,18 @@ def show_listado_tiendas(request):
 
 def show_store_menu(request, id):
     tienda = get_object_or_404(
-        Shop, id=id
+        Shop, shopID=id
     )  # si se intenta acceder a una tienda que no existe lanza error
     productos_listados = ProductListing.objects.filter(listedBy=tienda)
     productos = []
     for pl in productos_listados:
+        pathFoto = "/media/" + str(pl.listedProduct.prodImage)
         productos.append(
             {
                 "ProductName": pl.listedProduct.productName,
                 "priceCLP": pl.listedProduct.priceCLP,
                 "description": pl.listedProduct.description,
-                "imageURL": pl.listedProduct.imageURL,
+                "prodImage": pathFoto,
             }
         )
 
