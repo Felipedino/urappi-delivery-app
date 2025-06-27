@@ -8,7 +8,8 @@ from django.contrib import messages
 from django.urls import reverse
 
 from app_repartidor.views import repartidor_perfil
-
+from app_vendedor.views import show_my_store
+from app_comprador.views import show_listado_tiendas
 # Vista para registrar un nuevo usuario
 def register_user(request):
     if request.method == "GET":
@@ -35,6 +36,11 @@ def register_user(request):
             pronombre=pronombre,
             rol=rol,
         )
+        print(f"Usuario creado exitosamente:")
+        print(f"- ID: {user.id}")
+        print(f"- Username: {user.username}")
+        print(f"- Rol asignado: {user.rol}")
+        print(f"- Apodo: {user.apodo}")
         return render(request, "urappiapp/register_user.html")
 
 
@@ -55,7 +61,7 @@ def login_user(request):
         if usuario is not None:
             # Si la autenticación es exitosa, inicia sesión y redirige al home
             login(request, usuario)
-            return HttpResponseRedirect("/")
+            return redirect_by_role(request, usuario)
         else:
             # Si falla, muestra el formulario con un mensaje de error
             return render(request, "urappiapp/login.html", {"login_failed": True})
@@ -68,10 +74,10 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect("/")
 #-----------------------------------------redirigir según rol-----------------------------------------------
-def redirect_by_role(user):
+def redirect_by_role(request,user):
     """Redirige al usuario según su rol"""
     rol = user.rol
-    
+    print(f"Redirigiendo usuario {user.username} con rol: {rol}")
     if rol == "customer":
         return HttpResponseRedirect(reverse('comprador'))      
     elif rol == "deliver":
@@ -80,7 +86,7 @@ def redirect_by_role(user):
         return HttpResponseRedirect(reverse('vendedor'))        
     else:
         # Rol no válido, redirigir a página general con mensaje
-        messages.warning(user, f"Rol no reconocido: {rol}")
+        messages.warning(request, f"Rol no reconocido: {rol}")
         return HttpResponseRedirect(reverse('home'))
 #------------------------------------------------Vistas según rol-----------------------------------------
 #Vista para el comprador
@@ -89,12 +95,8 @@ def comprador(request):
     if not request.user.is_authenticated or request.user.rol != "customer":
         return redirect('login')
     
-    context = {
-        'user': request.user,
-        'apodo': request.apodo,
-        'Upuntos': request.puntos, 
-    }
-    return render(request, "app_comprador/_user_info.html", context)
+    
+    return show_listado_tiendas(request)
 #vista para el repartidor
 def repartidor(request):
     if not request.user.is_authenticated or request.user.rol != "deliver":
@@ -106,9 +108,4 @@ def vendedor(request):
     if not request.user.is_authenticated or request.user.rol != "seller":
         return redirect('login')
     
-    context = {
-        'user': request.user,
-        'apodo': request.apodo,
-        'Upuntos': request.puntos, 
-    }
-    return render(request, "app_vendedor/my_store.html", context)
+    return show_my_store(request)

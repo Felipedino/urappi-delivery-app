@@ -24,7 +24,7 @@ def show_listado_tiendas(request):
         "profilePic": "app_comprador/svg/portrait_placeholder.png",
     }
 
-    info = {"usuario": usuario, "tiendas": tiendas}
+    info = {"usuario": request.user, "tiendas": tiendas}
 
     return render(request, "app_comprador/stores_view.html", info)
 
