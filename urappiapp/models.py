@@ -15,6 +15,7 @@ class User(AbstractUser):
         ('deliver', 'Repartidor'),
         ('seller', 'Vendedor'),
     ])
+    upuntos = models.IntegerField(default=0)
 
 # Modelo que representa una tienda
 class Shop(models.Model):
