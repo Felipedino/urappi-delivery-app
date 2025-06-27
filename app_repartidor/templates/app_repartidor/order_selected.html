@@ -2,34 +2,6 @@
 {% load static %}
 {% block title %}Detalle de pedido{% endblock title %}
 
-    
-{% block header %}
-<header class="relative bg-gray-200 p-4 shadow-md flex justify-between items-center h-24">
-    
-    <div class="flex items-center">
-      
-        <div class="flex flex-col items-center mr-4">
-          
-            <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-blue-500"> 
-                <img src="{% static '/svg/user2.jpg' %}" alt="Foto de perfil" class="w-full h-full object-cover">
-            </div>
-
-               
-        </div>
-
-      
-        <h1 class="text-2xl font-bold text-gray-800">{{customer}}</h1>
-    </div>
-
-    
-    <div class="text-xl font-extrabold text-black"> {{ total }}</div>
-</header>
-
-{% endblock header %}
-
-
-
-
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">Detalles del Pedido #{{ orderID }}</h1>

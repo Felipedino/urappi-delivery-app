@@ -36,6 +36,7 @@ def show_my_store(request):
         print(pl.listedProduct.prodImage)
 
     info = {
+        "usuario": request.user,
         "tienda_id": tienda.shopID,
         "tienda": tienda,
         "productos": productos,
