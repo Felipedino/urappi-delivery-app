@@ -73,7 +73,7 @@ def order_details(request, order_id):
             "productName": item.product.productName,
             "priceCLP": item.price,
             "description": item.product.description,
-            "imageURL": item.product.imageURL,
+            "prodImage": item.product.prodImage,
             "quantity": item.quantity,
         }
         for item in order_items

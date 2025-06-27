@@ -3,7 +3,7 @@
 <div class="list-row items-center">
   <div class="list-row mb-4">
     <img
-      src="{{ producto.imageURL|safe }}"
+      src="{{ producto.prodImage }}"
       alt="{{ producto.ProductName }}"
       width="150px"
       class="rounded-lg border border-base-300"
@@ -13,6 +13,7 @@
       <div class="textarea-md">
         <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
         <p>{{ producto.description }}</p>
+        <p>Stock: {{ producto.stock }}</p>
         <p class="font-bold text-primary"> ${{ producto.priceCLP }}</p>
       </div>
 
