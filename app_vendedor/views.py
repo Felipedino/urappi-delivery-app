@@ -26,6 +26,7 @@ def show_my_store(request):
         pathFoto = "/media/" + str(pl.listedProduct.prodImage)
         productos.append(
             {
+                "productID": pl.listedProduct.productID,
                 "ProductName": pl.listedProduct.productName,
                 "priceCLP": pl.listedProduct.priceCLP,
                 "description": pl.listedProduct.description,
@@ -77,5 +78,31 @@ def addNewProduct(request):
         return redirect("app_vendedor:show_my_store")
         
 
+@login_required(login_url="/login")
+@require_POST
+def editProduct(request, productID):
+    if request.method== "POST":
+        print("modificar el producto", productID)
+        shop_owner = ShopOwner.objects.filter(owner=request.user).first()
+        tienda = shop_owner.shop
+        productos_listados = ProductListing.objects.filter(listedBy=tienda)
+        producto_listado = productos_listados.filter(listedProduct__productID=productID).first()
 
+        producto = producto_listado.listedProduct
+
+        productoNom = request.POST["nombre_producto_" + str(productID)]
+        precioStr = request.POST["valor_producto_" + str(productID)]
+        precio = precioStr.replace('$', '').replace('.', '').strip()
+        descripcion = request.POST["descr_producto_" + str(productID)]
+        stock = request.POST["stock_producto_" + str(productID)]
+        
+        producto.productName = productoNom
+        producto.priceCLP = precio
+        producto.description = descripcion
+        producto_listado.stockQuantity = stock
+
+        producto.save()
+        producto_listado.save()
+
+    return redirect("app_vendedor:show_my_store")
         

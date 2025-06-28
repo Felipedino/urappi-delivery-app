@@ -22,7 +22,7 @@
       {% csrf_token %}
       <div class="form-control mt-6">
         <label class="label" for="tip_producto">
-            <span class="label-text">Tipo del producto</span>
+            <span class="label-text">Tipo de producto</span>
         </label>
         <select id="tipo_prod" name="tipo_prod" class="select select-bordered select-primary w-full" required>
             <option disabled selected value="">Escoge el tipo de producto</option>
@@ -45,21 +45,21 @@
         <label class="label" for="valor_producto">
             <span class="label-text">Precio unitario (CLP)</span>
         </label>
-        <input type="text" id="valor_producto" name="valor_producto" class="input input-primary w-full" placeholder="$1.500" inputmode="numeric" required />
+        <input type="text" id="valor_producto" name="valor_producto" class="input input-primary w-9" placeholder="$1.500" inputmode="numeric" required />
       </div>
 
       <div class="form-control mt-6">
         <label class="label" for="stock_producto">
             <span class="label-text">Stock disponible</span>
         </label>
-        <input type="number" id="stock_producto" name="stock_producto" class="input input-primary w-full" placeholder="10" inputmode="numeric" required />
+        <input type="number" id="stock_producto" name="stock_producto" class="input input-primary w-9" placeholder="10" min="1" inputmode="numeric" required />
       </div>
 
       <div class="form-control mt-6">
         <label class="label" for="descr_producto">
             <span class="label-text">Descripción del producto</span>
         </label>
-        <textarea type="text" id="descr_producto" name="descr_producto" class="input textarea" placeholder="Salchicha, palta hass, tomate y mayo casera."></textarea>
+        <textarea type="text" id="descr_producto" name="descr_producto" class="input textarea w-full" placeholder="Salchicha, palta hass, tomate y mayo casera."></textarea>
       </div>
 
       <div class="form-control mt-6">
@@ -90,6 +90,32 @@
     value = new Intl.NumberFormat('es-CL').format(value);
     e.target.value = '$' + value;
   });
+
+  function modifyProduct(counter, id){
+    // Se muestra el formulario para editar el producto
+    const productoEdit = document.getElementById("editar_producto-" + counter);
+    productoEdit.style.display = "block";
+
+    // Se quita el producto original
+    const producto = document.getElementById("product-"+ counter);
+    producto.style.display = "none";
+
+    // Seleccionar el input de precio del producto actual
+    const inputPrecio = document.getElementById("valor_producto_" + id);
+
+    if (inputPrecio) {
+      // Formatear valor actual
+      let raw = inputPrecio.value.replace(/\D/g, '');
+      inputPrecio.value = '$' + new Intl.NumberFormat('es-CL').format(raw);
+
+      // Agregar listener para formatear mientras se escribe
+      inputPrecio.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = new Intl.NumberFormat('es-CL').format(value);
+        e.target.value = '$' + value;
+      });
+    }
+  }
 </script>
 {% endblock content %}
 
