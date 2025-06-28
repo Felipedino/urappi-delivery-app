@@ -26,6 +26,7 @@ def show_my_store(request):
         pathFoto = "/media/" + str(pl.listedProduct.prodImage)
         productos.append(
             {
+                "productID": pl.listedProduct.productID,
                 "ProductName": pl.listedProduct.productName,
                 "priceCLP": pl.listedProduct.priceCLP,
                 "description": pl.listedProduct.description,
@@ -33,7 +34,6 @@ def show_my_store(request):
                 "stock": pl.stockQuantity,
             }
         )
-        print(pl.listedProduct.prodImage)
 
     info = {
         "usuario": request.user,
@@ -78,5 +78,45 @@ def addNewProduct(request):
         return redirect("app_vendedor:show_my_store")
         
 
+@login_required(login_url="/login")
+@require_POST
+def editProduct(request, productID):
+    if request.method== "POST":
+        shop_owner = ShopOwner.objects.filter(owner=request.user).first()
+        tienda = shop_owner.shop
+        productos_listados = ProductListing.objects.filter(listedBy=tienda)
+        producto_listado = productos_listados.filter(listedProduct__productID=productID).first()
 
+        producto = producto_listado.listedProduct
+
+        productoNom = request.POST["nombre_producto_" + str(productID)]
+        precioStr = request.POST["valor_producto_" + str(productID)]
+        precio = precioStr.replace('$', '').replace('.', '').strip()
+        descripcion = request.POST["descr_producto_" + str(productID)]
+        stock = request.POST["stock_producto_" + str(productID)]
+        
+        producto.productName = productoNom
+        producto.priceCLP = precio
+        producto.description = descripcion
+        producto_listado.stockQuantity = stock
+
+        producto.save()
+        producto_listado.save()
+
+    return redirect("app_vendedor:show_my_store")
+
+
+def editStore(request):
+    if request.method== "POST":
+        shop_owner = ShopOwner.objects.filter(owner=request.user).first()
+        tienda = shop_owner.shop
+
+        tienda.shopDescription = request.POST["descr_tienda"]
+        tienda.location = request.POST["ubic_tienda"]
+        tienda.openTime = request.POST["hora_apertura"]
+        tienda.closingTime = request.POST["hora_cierre"]
+        tienda.save()
+
+
+    return redirect("app_vendedor:show_my_store")
         

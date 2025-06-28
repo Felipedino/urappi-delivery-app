@@ -24,7 +24,7 @@ class Shop(models.Model):
     openTime = models.TimeField()  # Hora de apertura
     closingTime = models.TimeField()  # Hora de cierre
     shopName = models.CharField(max_length=32)  # Nombre de la tienda
-    imageURL = models.URLField()  # Imagen de la tienda
+    shopImage = models.ImageField(upload_to="stores/", null=True, blank=True)  # Imagen de la tienda
     location = models.TextField()  # Ubicación de la tienda
 
     def __str__(self):

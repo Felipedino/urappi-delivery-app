@@ -1,37 +1,73 @@
 <!-- Este html corresponde a cada cuadro con información del producto en el menú de la tienda-->
 {% load static %}
-<div class="list-row items-center">
-  <div class="list-row mb-4">
-    <img
-      src="{{ producto.prodImage }}"
-      alt="{{ producto.ProductName }}"
-      width="150px"
-      class="rounded-lg border border-base-300"
-    />
-    <div>
-      <!--Descripción del producto-->
-      <div class="textarea-md">
-        <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
-        <p>{{ producto.description }}</p>
-        <p>Stock: {{ producto.stock }}</p>
-        <p class="font-bold text-primary"> ${{ producto.priceCLP }}</p>
-      </div>
+<div class="items-center" >
+  <div class="list-row items-center" id="product-{{ counter }}">
+    <div class="list-row mb-4" >
+      <img
+        src="{{ producto.prodImage }}"
+        alt="{{ producto.ProductName }}"
+        width="150px"
+        class="rounded-lg border border-base-300"
+      />
+      <div>
+        <!--Descripción del producto-->
+        <div class="textarea-md">
+          <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
+          <p>{{ producto.description }}</p>
+          <p>Stock: {{ producto.stock }}</p>
+          <p class="font-bold text-primary"> ${{ producto.priceCLP }}</p>
+        </div>
 
-      <form method="post" action="{% url 'add_to_cart' %}" class="flex items-center mt-3 space-x-2">
-        {% csrf_token %}
-        <input type="hidden" name="product_name" value="{{ producto.ProductName }}">
-        
-      </form>    
+        <form method="post" action="{% url 'add_to_cart' %}" class="flex items-center mt-3 space-x-2">
+          {% csrf_token %}
+          <input type="hidden" name="product_name" value="{{ producto.ProductName }}">
+          
+        </form>    
+      </div>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-primary" onclick="modifyProduct('{{ counter }}', '{{ producto.productID }}')">Editar producto</button>
     </div>
   </div>
-  <!--Queda por implementar este botón-->
-  <div class="">
-      <button type="submit" class="btn btn-primary" onclick="modifyProduct()">Editar producto</button>
+
+
+  <!--Form para modificar el producto-->
+  <div style="display: none;" id="editar_producto-{{ counter }}">
+    <form method="post" action="{% url 'app_vendedor:editProduct' producto.productID %}" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-control mt-6">
+        <label class="label" for="nombre_producto_{{producto.productID}}">
+            <span class="label-text">Nombre del producto</span>
+        </label>
+        <input type="text" id="nombre_producto_{{producto.productID}}" name="nombre_producto_{{producto.productID}}" class="input input-bordered input-primary w-9" placeholder="Completo italiano" value="{{ producto.ProductName}}" required/>
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="descr_producto_{{producto.productID}}">
+            <span class="label-text">Descripción del producto</span>
+        </label>
+        <textarea type="text" id="descr_producto_{{producto.productID}}" name="descr_producto_{{producto.productID}}" class="input textarea w-9" placeholder="Salchicha, palta hass, tomate y mayo casera." >{{ producto.description }}</textarea>
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="stock_producto_{{producto.productID}}">
+            <span class="label-text">Stock disponible</span>
+        </label>
+        <input type="number" id="stock_producto_{{producto.productID}}" name="stock_producto_{{producto.productID}}" class="input input-primary w-9" placeholder="10" min="1" inputmode="numeric" value="{{ producto.stock }}" required />
+      </div>
+
+      <div class="form-control mt-6">
+        <label class="label" for="valor_producto_{{producto.productID}}">
+            <span class="label-text">Precio unitario (CLP)</span>
+        </label>
+        <input type="text" id="valor_producto_{{producto.productID}}" name="valor_producto_{{producto.productID}}" class="input input-primary w-9" placeholder="$1.500" value="{{ producto.priceCLP }}" inputmode="numeric" required />
+      </div>
+
+      <div class="form-control mt-6">
+        <button type="submit" class="btn btn-primary w-full">Guardar cambios</button>
+      </div>
+    </form>
   </div>
 </div>
-
-<script>
-  function modifyProduct(id_product){
-
-  }
-</script>
