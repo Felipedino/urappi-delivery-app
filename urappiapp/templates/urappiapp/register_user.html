@@ -67,26 +67,26 @@
           </select>
         </div>
 
-        <div style="display: none;" id="tiendaInput">
+        <div style="display: none;" id="seccion_vendedor">
             <div class="form-control mb-4" >
               <label class="label" for="nombre_tienda">
                 <span class="label-text">Nombre de su tienda</span>
               </label>
-              <input type="text" id="nombre_tienda" name="nombre_tienda" class="input input-bordered input-primary w-full" min="5" max="80" required />
+              <input type="text" id="nombre_tienda" name="nombre_tienda" class="input input-bordered input-primary w-full" min="5" max="80" />
             </div>
 
             <div class="form-control mb-4">
               <label class="label" for="hora_apertura">
                 <span class="label-text">Hora de apertura</span>
               </label>
-              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-full" required />
+              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-full" />
             </div>
 
             <div class="form-control mb-4">
               <label class="label" for="hora_cierre">
                 <span class="label-text">Hora de cierre</span>
               </label>
-              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-full" required />
+              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-full" />
             </div>
 
             <div class="form-control mb-4" >
@@ -100,14 +100,14 @@
               <label class="label" for="descr_tienda">
                   <span class="label-text">Descripción de la tienda</span>
               </label>
-              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea input-primary w-full" placeholder="Descripción de la tienda." min="5" max="200" required></textarea>
+              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea input-primary w-full" placeholder="Descripción de la tienda." min="5" max="200"></textarea>
             </div>
 
             <div class="form-control mt-6">
               <label class="label" for="foto_tienda">
                   <span class="label-text">Foto de la tienda</span>
               </label>
-              <input type="file" id="foto_tienda" name="foto_tienda" accept="image/png, image/jpeg" class="file-input input-primary" required/>
+              <input type="file" id="foto_tienda" name="foto_tienda" accept="image/png, image/jpeg" class="file-input input-primary"/>
             </div>
 
         </div>
@@ -129,16 +129,20 @@
 <script>
   function toggleTiendaInput() {
     const rol = document.getElementById("rol").value;
-    const tiendaInput = document.getElementById("tiendaInput");
+    const seccionVendedor = document.getElementById("seccion_vendedor");
+    const camposVendedor = seccionVendedor.querySelectorAll("input, textarea, select");
 
     if (rol === "seller") {
-      tiendaInput.style.display = "block";
+      seccionVendedor.style.display = "block"; // se muestra la sección
+      camposVendedor.forEach((campo) => campo.setAttribute("required", "required")); // se marcan todos los input como required
+
     } else {
-      tiendaInput.style.display = "none";
+      seccionVendedor.style.display = "none";
+      camposVendedor.forEach((campo) => campo.removeAttribute("required"));
     }
 
     setTimeout(() => {
-      tiendaInput.scrollIntoView({ behavior: "smooth", block: "start" });
+      seccionVendedor.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
   }
 </script>
