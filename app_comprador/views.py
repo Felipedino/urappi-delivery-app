@@ -18,13 +18,9 @@ from urappiapp.models import (
 def show_listado_tiendas(request):
     tiendas = Shop.objects.all()
 
-    usuario = {
-        "nombre": "Juan Carlos",
-        "upuntos": 1000,
-        "profilePic": "app_comprador/svg/portrait_placeholder.png",
-    }
+    
 
-    info = {"usuario": usuario, "tiendas": tiendas}
+    info = {"usuario": request.user,"tiendas": tiendas}
 
     return render(request, "app_comprador/stores_view.html", info)
 
@@ -46,17 +42,12 @@ def show_store_menu(request, id):
             }
         )
 
-    usuario = {
-        "nombre": "Juan Carlos",
-        "upuntos": 1000,
-        "profilePic": "app_comprador/svg/portrait_placeholder.png",
-    }
 
     info = {
         "tienda_id": id,
         "tienda": tienda,
         "productos": productos,
-        "usuario": usuario,
+        "usuario": request.user,
     }
 
     return render(request, "app_comprador/store_menu.html", info)
@@ -109,16 +100,14 @@ def show_cart(request):
 
     total_price = sum(item.subtotal for item in items)
 
-    usuario = {
-        "nombre": "Juan Carlos",
-        "upuntos": 1000,
-        "profilePic": "app_comprador/svg/portrait_placeholder.png",
-    }
+    info = {
 
+        "usuario": request.user,
+    }
     return render(
         request,
         "app_comprador/cart.html",
-        {"cart_items": items, "total_price": total_price, "usuario": usuario},
+         info,
     )
 
 

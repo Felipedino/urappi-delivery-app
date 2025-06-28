@@ -36,6 +36,8 @@ def show_my_store(request):
         )
 
     info = {
+        "usuario": request.user,
+        "tienda_id": tienda.shopID,
         "tienda": tienda,
         "productos": productos,
     }

@@ -13,7 +13,9 @@ def repartidor_perfil(request):
     #Desplegar las ordenes pendientes
     pending_orders = [OrderSerializer.to_json(order) for order in orders]
 
-    context = {"pending_orders": pending_orders}
+    context = {
+        "usuario": request.user,
+        "pending_orders": pending_orders}
 
     return render(request, "app_repartidor/deliverer.html", context)
 
@@ -81,6 +83,7 @@ def order_details(request, order_id):
     #información a desplegar en la vista de detalles de orden
 
     info = {
+        "usuario": request.user,
         "orderID": selected_order.id,
         "status": selected_order.status,
         "customer": (
@@ -101,7 +104,11 @@ def order_details(request, order_id):
 # Renderizar página de resumen de la orden para el repartidor
 def estado_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)  # 
-    return render(request, 'app_repartidor/estado_order.html', {'order': order})
+    context = {
+        "usuario": request.user,
+        'order': order
+        }
+    return render(request, 'app_repartidor/estado_order.html', context)
 
 #Lógica de  entrega de pedido por el repartidor
 @require_POST
