@@ -37,12 +37,22 @@ def register_user(request):
         )
 
         if rol == "seller":
-            # Por ahora basta un nombre para registar una tienda
             shopName = request.POST["nombre_tienda"]
             openTime = request.POST["hora_apertura"]
             closeTime = request.POST["hora_cierre"]
-            shop = Shop.objects.create(shopName=shopName, openTime=openTime, closingTime=closeTime)
-            owner = ShopOwner.objects.create(owner = user, shop=shop) # Se signa como dueño de la tienda creada
+            ubication = request.POST["ubicacion_tienda"]
+            description = request.POST["descr_tienda"]
+            foto = request.FILES.get('foto_tienda', None)
+
+
+            shop = Shop.objects.create(shopName=shopName, 
+                                       shopDescription=description,
+                                       openTime=openTime, 
+                                       closingTime=closeTime,
+                                       shopImage=foto,
+                                       location=ubication)
+            
+            owner = ShopOwner.objects.create(owner = user, shop=shop) # Se asigna como dueño de la tienda creada
         
 
         return render(request, "urappiapp/register_user.html")

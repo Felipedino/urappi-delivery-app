@@ -11,21 +11,21 @@
       <h2 class="card-title justify-center">👤 Registro</h2>
       <p class="text-center text-sm mb-4">Crea tu cuenta para usar URappi</p>
 
-      <form method="post">
+      <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-control mb-4">
           <label class="label" for="nombre_usuario">
             <span class="label-text">Nombre</span>
           </label>
-          <input type="text" id="nombre_usuario" name="nombre_usuario" class="input input-bordered input-primary w-full" required />
+          <input type="text" id="nombre_usuario" name="nombre_usuario" class="input input-bordered input-primary w-full" min="5" max="80" required />
         </div>
 
         <div class="form-control mb-4">
           <label class="label" for="apodo">
             <span class="label-text">Apodo</span>
           </label>
-          <input type="text" id="apodo" name="apodo" class="input input-bordered input-primary w-full" required />
+          <input type="text" id="apodo" name="apodo" class="input input-bordered input-primary w-full" min="3" max="80" required />
         </div>
 
         <div class="form-control mb-4">
@@ -72,22 +72,44 @@
               <label class="label" for="nombre_tienda">
                 <span class="label-text">Nombre de su tienda</span>
               </label>
-              <input type="text" id="nombre_tienda" name="nombre_tienda" class="input input-bordered input-primary w-full" required />
+              <input type="text" id="nombre_tienda" name="nombre_tienda" class="input input-bordered input-primary w-full" min="5" max="80" required />
             </div>
 
             <div class="form-control mb-4">
               <label class="label" for="hora_apertura">
                 <span class="label-text">Hora de apertura</span>
               </label>
-              <input type="time" id="hora_apertura" name="hora_apertura" class="input time w-full" required />
+              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-full" required />
             </div>
 
             <div class="form-control mb-4">
               <label class="label" for="hora_cierre">
                 <span class="label-text">Hora de cierre</span>
               </label>
-              <input type="time" id="hora_cierre" name="hora_cierre" class="input time w-full" required />
+              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-full" required />
             </div>
+
+            <div class="form-control mb-4" >
+              <label class="label" for="ubicacion_tienda">
+                <span class="label-text">Ubicación tienda</span>
+              </label>
+              <input type="text" id="ubicacion_tienda" name="ubicacion_tienda" class="input input-bordered w-full" min="5" max="100"/>
+            </div>
+
+            <div class="form-control mt-6">
+              <label class="label" for="descr_tienda">
+                  <span class="label-text">Descripción de la tienda</span>
+              </label>
+              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea input-primary w-full" placeholder="Descripción de la tienda." min="5" max="200" required></textarea>
+            </div>
+
+            <div class="form-control mt-6">
+              <label class="label" for="foto_tienda">
+                  <span class="label-text">Foto de la tienda</span>
+              </label>
+              <input type="file" id="foto_tienda" name="foto_tienda" accept="image/png, image/jpeg" class="file-input input-primary" required/>
+            </div>
+
         </div>
         
 
@@ -114,6 +136,10 @@
     } else {
       tiendaInput.style.display = "none";
     }
+
+    setTimeout(() => {
+      tiendaInput.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
   }
 </script>
 
