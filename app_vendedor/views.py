@@ -34,10 +34,8 @@ def show_my_store(request):
                 "stock": pl.stockQuantity,
             }
         )
-        print(pl.listedProduct.prodImage)
 
     info = {
-        "tienda_id": tienda.shopID,
         "tienda": tienda,
         "productos": productos,
     }
@@ -82,7 +80,6 @@ def addNewProduct(request):
 @require_POST
 def editProduct(request, productID):
     if request.method== "POST":
-        print("modificar el producto", productID)
         shop_owner = ShopOwner.objects.filter(owner=request.user).first()
         tienda = shop_owner.shop
         productos_listados = ProductListing.objects.filter(listedBy=tienda)
@@ -103,6 +100,21 @@ def editProduct(request, productID):
 
         producto.save()
         producto_listado.save()
+
+    return redirect("app_vendedor:show_my_store")
+
+
+def editStore(request):
+    if request.method== "POST":
+        shop_owner = ShopOwner.objects.filter(owner=request.user).first()
+        tienda = shop_owner.shop
+
+        tienda.shopDescription = request.POST["descr_tienda"]
+        tienda.location = request.POST["ubic_tienda"]
+        tienda.openTime = request.POST["hora_apertura"]
+        tienda.closingTime = request.POST["hora_cierre"]
+        tienda.save()
+
 
     return redirect("app_vendedor:show_my_store")
         

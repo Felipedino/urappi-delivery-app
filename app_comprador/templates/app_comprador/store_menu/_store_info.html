@@ -8,8 +8,9 @@
     <div id="store-info">
 
       <h1 class="text-xl font-bold">{{tienda.shopName}}</h1>
-      <p>Ubicación: {{tienda.ubication}}</p>  
-      <p class="py-6">{{ tienda.shopDescription }} </p>
+      <ul >{{ tienda.shopDescription }} </ul>
+      <ul>Ubicación: {{tienda.location}}</ul>  
+      <ul>Horario: {{ tienda.openTime }} - {{ tienda.closingTime }}</ul>
 
     </div>
   </div>

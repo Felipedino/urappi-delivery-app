@@ -6,14 +6,53 @@
      <img src="{{tienda.imageURL}}" class="max-w-sm shadow-2xl" />
 
     <div id="store-info">
-
       <h1 class="text-xl font-bold">{{tienda.shopName}}</h1>
-      <p>Ubicación: {{tienda.ubication}}</p>  
-      <p class="py-6">{{ tienda.shopDescription }} </p>
+      <div id="info_tienda">
+        <ul >{{ tienda.shopDescription }} </ul>
+        <ul>Ubicación: {{tienda.location}}</ul>  
+        <ul>Horario: {{ tienda.openTime }} - {{ tienda.closingTime }}</ul>
+      </div>
+
+      <div style="display: none;" id="editar_tienda">
+        <form method="post" action="{% url 'app_vendedor:editStore' %}">
+            {% csrf_token %}
+            <div class="form-control mb-4" >
+              <label class="label" for="descr_tienda">
+                <span class="label-text">Descripción</span>
+              </label>
+              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea w-9" required>{{ tienda.shopDescription }}</textarea>
+            </div>
+
+            <div class="form-control mb-4" >
+              <label class="label" for="ubic_tienda">
+                <span class="label-text">Ubicación</span>
+              </label>
+              <input type="text" id="ubic_tienda" name="ubic_tienda" class="input input-bordered input-primary w-full" value="{{tienda.location}}" required />
+            </div>
+
+            <div class="form-control mb-4">
+              <label class="label" for="hora_apertura">
+                <span class="label-text">Hora de apertura</span>
+              </label>
+              <input type="time" id="hora_apertura" name="hora_apertura" class="input time w-9" value="{{ tienda.openTime|time:'H:i' }}" required />
+            </div>
+
+            <div class="form-control mb-4">
+              <label class="label" for="hora_cierre">
+                <span class="label-text">Hora de cierre</span>
+              </label>
+              <input type="time" id="hora_cierre" name="hora_cierre" class="input time w-9" value="{{ tienda.closingTime|time:'H:i' }}" required />
+            </div>
+
+            <div class="form-control mt-6">
+              <button type="submit" class="btn btn-primary w-full">Guardar cambios</button>
+            </div>
+        </form>
+      </div>
 
     </div> 
     <!--Queda por implementar este botón-->
-    <div>
+    <div id="edit-btn">
       <button type="submit" class="btn btn-primary" onclick="modifyDesc()">Editar descripción</button>
     </div>
   </div>
@@ -24,7 +63,16 @@
 </div>
 <script>
   function modifyDesc(){
-    
+    // Se muestra el formulario para editar el producto
+    const tiendaEdit = document.getElementById("editar_tienda");
+    tiendaEdit.style.display = "block";
+
+    // Se quita el producto original
+    const tienda = document.getElementById("info_tienda");
+    tienda.style.display = "none";
+
+    const editBtn = document.getElementById("edit-btn");
+    editBtn.style.display = "none";
   }
 </script>
 
