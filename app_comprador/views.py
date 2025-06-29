@@ -1,7 +1,9 @@
 from datetime import datetime
+from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db import transaction
 
 from urappiapp.models import (
     Cart,
@@ -36,6 +38,7 @@ def show_store_menu(request, id):
         productos.append(
             {
                 "ProductName": pl.listedProduct.productName,
+                "id": pl.listedProduct.productID,
                 "priceCLP": pl.listedProduct.priceCLP,
                 "description": pl.listedProduct.description,
                 "prodImage": pathFoto,
@@ -57,13 +60,13 @@ def show_store_menu(request, id):
 @login_required(login_url="/login")
 def add_to_cart(request):
     if request.method == "POST":
-        product_name = request.POST.get("product_name")
+        print(request.POST)
+    if request.method == "POST":
+        product_id = request.POST.get("product_id")  # <-- CAMBIA "product_name" por "product_id"
         quantity = int(request.POST.get("quantity", 1))
 
         try:
-            # Busca el producto por nombre (puede ser problemático hacerlo así si hay dos productos con el mismo nombre)
-            product = Product.objects.get(productName=product_name)
-            # Se busca el ProductListing asociado
+            product = Product.objects.get(productID=product_id)  # <-- BÚSQUEDA POR ID
             product_listing = ProductListing.objects.get(listedProduct=product)
         except Product.DoesNotExist:
             return redirect(request.META.get("HTTP_REFERER", "/"))
@@ -100,16 +103,23 @@ def show_cart(request):
 
     total_price = sum(item.subtotal for item in items)
 
-    info = {
+    # Se agrupa por tienda
+    tiendas = defaultdict(list)
+    for item in items:
+        tiendas[item.product_listing.listedBy].append(item)
 
+    # Info del carrito
+    info = {
         "usuario": request.user,
+        "cart_items": items,
+        "cart_items_by_shop": dict(tiendas),
+        "total_price": total_price,
     }
     return render(
         request,
         "app_comprador/cart.html",
-         info,
+        info,
     )
-
 
 # Vista para eliminar un item del carrito
 @login_required(login_url="/login")
@@ -145,43 +155,57 @@ def update_cart(request, item_id, action):
     # Redireccionar de vuelta al carrito
     return redirect("cart")
 
-
-login_required(login_url="/login")
-
-
 # Vista para crear orden al comprar carrito
+@login_required(login_url="/login") # Se requiere estar logueado para crear una orden
+@transaction.atomic # create_order se define como una transaccion atomica, es decir que si falla, se deshacen todos los cambios hechos en la base de datos.
 def create_order(request):
-    # Obtener el carrito del usuario
-    cart = Cart.objects.get(user=request.user)
-    cart_items = CartItem.objects.filter(cart=cart).select_related(
-        "product_listing", "product_listing__listedProduct"
-    )
-
-    # Obtener la tienda (asumimos que todos los productos son de la misma tienda)
-    shop = cart_items[0].product_listing.listedBy
-
-    # Crear la orden
-    order = Order(
-        customer=request.user,
-        shop=shop,
-        createdAt=datetime.now(),
-        deliveredAt=None,  # Se establecerá cuando se entregue
-        deliveryLocation=shop.location,
-        status=1,  # 1 = Pendiente
-    )
-    order.save()
-
-    # Crear los items de la orden
-    for item in cart_items:
-        product = item.product_listing.listedProduct
-        OrderItem.objects.create(
-            order=order,
-            product=product,
-            quantity=item.quantity,
-            price=product.priceCLP,
+    if request.method == "POST":
+        # Obtener el carrito del usuario
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart).select_related(
+            "product_listing", "product_listing__listedProduct"
         )
 
-    # Limpiar el carrito
-    cart_items.delete()
+        # Se agrupan los ítems por tienda
+        tiendas = {}
+        for item in cart_items:
+            shop = item.product_listing.listedBy
+            if shop.shopID not in tiendas:
+                tiendas[shop.shopID] = {"shop": shop, "items": []}
+            tiendas[shop.shopID]["items"].append(item)
 
-    return redirect("home")
+        # Se crea una orden para los productos de cada tienda
+        for idx, (shop_id, data) in enumerate(tiendas.items()):
+            # Se obtiene el texto de instrucciones de entrega ingresado para esta tienda
+            instructions = request.POST.get(f"instructions_{idx}", "")
+            shop = data["shop"]
+
+            # Se crea la orden en la base de datos
+            order = Order.objects.create(
+                customer=request.user,  # El usuario que hace la compra
+                shop=shop,  # La tienda
+                createdAt=datetime.now(),  # Fecha actual
+                deliveredAt=None,  # Estado inicial
+                deliveryLocation=shop.location,  # Ubicación por defecto de la tienda
+                status=1,  # Estado inicial
+                deliveryInstructions=instructions,  # Instrucciones de entrega
+            )
+
+            # Se ingresan los ítems individuales a la orden
+            for item in data["items"]:
+                product = item.product_listing.listedProduct  # Obtiene el producto asociado a ese item del carrito
+                OrderItem.objects.create(
+                    order=order,  # Relaciona este OrderItem con la orden creada (para la tienda actual)
+                    product=product,  # Producto solicitado
+                    quantity=item.quantity,  # Cantidad que el usuario agregó al carrito de este producto
+                    price=product.priceCLP,  # Precio del producto
+                )
+
+        # Se limpia el carrito
+        cart_items.delete()
+
+        # Se redirecciona al home luego de haber ingresado todo a la base de datos
+        return redirect("home")
+
+    else:
+        return redirect("cart") # Si por alguna razon no se realiza un post y se accede a esta función, no pasa nada y el usuario permanece en el carrito
