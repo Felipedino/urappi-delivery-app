@@ -18,9 +18,7 @@ from urappiapp.models import (
 def show_listado_tiendas(request):
     tiendas = Shop.objects.all()
 
-    
-
-    info = {"usuario": request.user,"tiendas": tiendas}
+    info = {"usuario": request.user, "tiendas": tiendas}
 
     return render(request, "app_comprador/stores_view.html", info)
 
@@ -41,7 +39,6 @@ def show_store_menu(request, id):
                 "prodImage": pathFoto,
             }
         )
-
 
     info = {
         "tienda_id": id,
@@ -101,13 +98,14 @@ def show_cart(request):
     total_price = sum(item.subtotal for item in items)
 
     info = {
-
         "usuario": request.user,
+        "cart_items": items,
+        "total_price": total_price,
     }
     return render(
         request,
         "app_comprador/cart.html",
-         info,
+        info,
     )
 
 

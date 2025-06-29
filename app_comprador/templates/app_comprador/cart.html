@@ -9,7 +9,7 @@
     <div class="space-y-6">
         {% for item in cart_items %}
         <div class="card flex flex-row items-center bg-base-100 shadow-md rounded-xl p-4">
-            <img src="{{ item.product_listing.listedProduct.imageURL }}" alt="{{ item.product_listing.listedProduct.productName }}"
+            <img src="{{ item.product_listing.listedProduct.prodImage.url }}" alt="{{ item.product_listing.listedProduct.productName }}"
                  class="w-24 h-24 object-cover rounded-lg mr-6 border border-base-300">
             <div class="flex-1">
                 <div class="flex items-center justify-between">
