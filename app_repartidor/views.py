@@ -3,6 +3,7 @@ from datetime import date
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_POST
+from django.core.paginator import Paginator
 
 from urappiapp.models import Order
 from urappiapp.serializers import *
@@ -10,12 +11,17 @@ from urappiapp.serializers import *
 ## Renderizamos páginas para repartidores, con órdenes pendientes
 def repartidor_perfil(request):
     orders = Order.objects.filter(status=1)
+    ordersPerPage = 7
+    paginator = Paginator(orders, ordersPerPage)
     #Desplegar las ordenes pendientes
-    pending_orders = [OrderSerializer.to_json(order) for order in orders]
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    pending_orders = [OrderSerializer.to_json(order) for order in page_obj]
 
     context = {
         "usuario": request.user,
-        "pending_orders": pending_orders}
+        "pending_orders": pending_orders,
+        "page_obj": page_obj}
 
     return render(request, "app_repartidor/deliverer.html", context)
 
