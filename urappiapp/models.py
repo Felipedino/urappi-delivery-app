@@ -80,6 +80,7 @@ class Order(models.Model):
     deliveredAt = models.DateTimeField(null=True)  # Fecha de entrega
     deliveryLocation = models.TextField()
     status = models.IntegerField()  # Estado de la orden (puede ser un enum)
+    deliveryInstructions = models.TextField(blank=True, null=True)  # Instrucciones de entrega (puede ser vacío)
 
 
 class OrderItem(models.Model):
