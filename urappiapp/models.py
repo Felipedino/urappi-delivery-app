@@ -10,12 +10,16 @@ class User(AbstractUser):
     pronombre = models.CharField(max_length=5, choices=pronombres)
     apodo = models.CharField(max_length=30)  # Apodo o nombre visible
 
-    rol = models.CharField(max_length=20, choices=[
-        ('customer', 'Cliente'),
-        ('deliver', 'Repartidor'),
-        ('seller', 'Vendedor'),
-    ])
+    rol = models.CharField(
+        max_length=20,
+        choices=[
+            ("customer", "Cliente"),
+            ("deliver", "Repartidor"),
+            ("seller", "Vendedor"),
+        ],
+    )
     upuntos = models.IntegerField(default=0)
+
 
 # Modelo que representa una tienda
 class Shop(models.Model):
@@ -24,26 +28,41 @@ class Shop(models.Model):
     openTime = models.TimeField()  # Hora de apertura
     closingTime = models.TimeField()  # Hora de cierre
     shopName = models.CharField(max_length=32)  # Nombre de la tienda
-    shopImage = models.ImageField(upload_to="stores/", null=True, blank=True)  # Imagen de la tienda
+    shopImage = models.ImageField(
+        upload_to="stores/", null=True, blank=True
+    )  # Imagen de la tienda
     location = models.TextField()  # Ubicación de la tienda
 
     def __str__(self):
         return self.shopName
 
+
 # Relación entre tiendas y sus dueños
 class ShopOwner(models.Model):
-    owner = models.ForeignKey( User, on_delete=models.CASCADE)  # Usuario dueño de la tienda
-    shop = models.ForeignKey( Shop, on_delete=models.CASCADE ) 
+    owner = models.ForeignKey(
+        User, on_delete=models.CASCADE
+    )  # Usuario dueño de la tienda
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
 
 
 # Modelo que representa un producto
 class Product(models.Model):
-    categorys = [("beb-cal", "Bebidas calientes"), ("beb-fria", "Bebidas frías"), ("pas-boll", "Pastelería y Bollería"), ("sandw", "Sandwiches"), ("otro", "Otro")]
+    categorys = [
+        ("beb-cal", "Bebidas calientes"),
+        ("beb-fria", "Bebidas frías"),
+        ("pas-boll", "Pastelería y Bollería"),
+        ("sandw", "Sandwiches"),
+        ("otro", "Otro"),
+    ]
     productID = models.AutoField(primary_key=True)
     productName = models.CharField(max_length=32)  # Nombre del producto
-    category = models.CharField(max_length=32, choices=categorys)  # Categoría del producto
+    category = models.CharField(
+        max_length=32, choices=categorys
+    )  # Categoría del producto
     description = models.TextField()  # Descripción del producto
-    prodImage = models.ImageField(upload_to="products/", null=True, blank=True)  # Imagen del producto
+    prodImage = models.ImageField(
+        upload_to="products/", null=True, blank=True
+    )  # Imagen del producto
     priceCLP = models.IntegerField()  # Precio en CLP
 
     def __str__(self):
@@ -80,6 +99,11 @@ class Order(models.Model):
     deliveredAt = models.DateTimeField(null=True)  # Fecha de entrega
     deliveryLocation = models.TextField()
     status = models.IntegerField()  # Estado de la orden (puede ser un enum)
+    products_total = models.IntegerField(default=0)  # Total de productos
+    delivery_fee = models.IntegerField(default=1500)  # Costo de envío
+    total_amount = models.IntegerField(default=0)  # Total general
+    shop_paid = models.BooleanField(default=False)  # Si se ha pagado a la tienda
+    deliverer_paid = models.BooleanField(default=False)  # Si se ha pagado al repartidor
 
 
 class OrderItem(models.Model):

@@ -56,20 +56,53 @@
         {% endfor %}
     </div>
 
-    <!-- Total general -->
-    <div class="mt-10 flex flex-col items-end">
-        <span class="text-xl font-semibold text-neutral-content">
-            Total: ${{ total_price }}
-        </span>
-        <div class="max-w-3xl mx-auto py-4 px-4 flex justify-end">
-            <div class="text-right">
-                <span class="text-lg font-bold text-primary">Total de la orden: ${{ total_price }}</span>
+    <!-- Desglose de costos -->
+    <div class="card bg-base-100 shadow-md rounded-xl p-6 mt-8">
+        <h3 class="text-lg font-bold mb-4">Resumen de la Compra</h3>
+        <div class="space-y-2">
+            <div class="flex justify-between">
+                <span>Subtotal productos:</span>
+                <span class="font-medium">${{ total_price }}</span>
+            </div>
+            <div class="flex justify-between">
+                <span>Cargo fijo envío:</span>
+                <span class="font-medium">$1,500</span>
+            </div>
+            <div class="divider my-2"></div>
+            <div class="flex justify-between text-lg font-bold">
+                <span>Total a pagar:</span>
+                <span class="text-primary">${{ final_total }}</span>
             </div>
         </div>
-        <form method="post" action="{% url 'create_order' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary mt-4">Enviar orden</button>
-        </form>
+    </div>
+
+    <!-- Estado de UPuntos -->
+    <div class="alert {{ sufficient_funds|yesno:'alert-success,alert-error' }} shadow-lg mt-6">
+        <div>
+            {% if sufficient_funds %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Tienes suficientes UPuntos ({{ usuario.upuntos }}) para esta compra.</span>
+            {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>No tienes suficientes UPuntos ({{ usuario.upuntos }}). Necesitas {{ final_total }} UPuntos.</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Botón de compra -->
+    <div class="flex flex-col items-end mt-6">
+        {% if sufficient_funds %}
+            <form method="post" action="{% url 'create_order' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Enviar orden</button>
+            </form>
+        {% else %}
+            <a href="{% url 'profile' %}" class="btn btn-primary">Recargar UPuntos</a>
+        {% endif %}
     </div>
     {% else %}
     <div class="flex flex-col items-center justify-center py-20">
@@ -78,5 +111,4 @@
     </div>
     {% endif %}
 </div>
-
 {% endblock %}

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -95,12 +96,21 @@ def show_cart(request):
     for item in items:
         item.subtotal = item.quantity * item.product_listing.listedProduct.priceCLP
 
+    # Cálculo de costos
     total_price = sum(item.subtotal for item in items)
+    delivery_fee = 1500  # Cargo fijo de envío
+    final_total = total_price + delivery_fee
+
+    # Verificar si el usuario tiene suficientes UPuntos
+    sufficient_funds = request.user.upuntos >= final_total
 
     info = {
         "usuario": request.user,
         "cart_items": items,
         "total_price": total_price,
+        "delivery_fee": delivery_fee,
+        "final_total": final_total,
+        "sufficient_funds": sufficient_funds,
     }
     return render(
         request,
@@ -148,38 +158,74 @@ login_required(login_url="/login")
 
 
 # Vista para crear orden al comprar carrito
+@login_required(login_url="/login")
 def create_order(request):
     # Obtener el carrito del usuario
-    cart = Cart.objects.get(user=request.user)
-    cart_items = CartItem.objects.filter(cart=cart).select_related(
-        "product_listing", "product_listing__listedProduct"
-    )
-
-    # Obtener la tienda (asumimos que todos los productos son de la misma tienda)
-    shop = cart_items[0].product_listing.listedBy
-
-    # Crear la orden
-    order = Order(
-        customer=request.user,
-        shop=shop,
-        createdAt=datetime.now(),
-        deliveredAt=None,  # Se establecerá cuando se entregue
-        deliveryLocation=shop.location,
-        status=1,  # 1 = Pendiente
-    )
-    order.save()
-
-    # Crear los items de la orden
-    for item in cart_items:
-        product = item.product_listing.listedProduct
-        OrderItem.objects.create(
-            order=order,
-            product=product,
-            quantity=item.quantity,
-            price=product.priceCLP,
+    try:
+        cart = Cart.objects.get(user=request.user)
+        cart_items = CartItem.objects.filter(cart=cart).select_related(
+            "product_listing", "product_listing__listedProduct"
         )
 
-    # Limpiar el carrito
-    cart_items.delete()
+        if not cart_items:
+            messages.error(request, "Tu carrito está vacío.")
+            return redirect("cart")
 
-    return redirect("home")
+        # Cálculo de costos
+        total_price = sum(
+            item.quantity * item.product_listing.listedProduct.priceCLP
+            for item in cart_items
+        )
+        delivery_fee = 1500  # Cargo fijo de envío
+        final_total = total_price + delivery_fee
+
+        # Verificar si el usuario tiene suficientes UPuntos
+        if request.user.upuntos < final_total:
+            messages.error(
+                request, "No tienes suficientes UPuntos para completar esta compra."
+            )
+            return redirect("cart")
+
+        # Obtener la tienda (asumimos que todos los productos son de la misma tienda)
+        shop = cart_items[0].product_listing.listedBy
+
+        # Crear la orden
+        order = Order(
+            customer=request.user,
+            shop=shop,
+            createdAt=datetime.now(),
+            deliveredAt=None,  # Se establecerá cuando se entregue
+            deliveryLocation=shop.location,
+            status=1,  # 1 = Pendiente
+            products_total=total_price,
+            delivery_fee=delivery_fee,
+            total_amount=final_total,
+        )
+        order.save()
+
+        # Crear los items de la orden
+        for item in cart_items:
+            product = item.product_listing.listedProduct
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                quantity=item.quantity,
+                price=product.priceCLP,
+            )
+
+        # Deducir UPuntos del cliente
+        request.user.upuntos -= final_total
+        request.user.save()
+
+        # Limpiar el carrito
+        cart_items.delete()
+
+        messages.success(request, "¡Tu orden ha sido enviada correctamente!")
+        return redirect("home")
+
+    except Cart.DoesNotExist:
+        messages.error(request, "No se pudo encontrar tu carrito.")
+        return redirect("cart")
+    except Exception as e:
+        messages.error(request, f"Error al procesar la orden: {str(e)}")
+        return redirect("cart")
