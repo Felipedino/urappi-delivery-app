@@ -1,0 +1,221 @@
+{% extends "urappi/base.html" %}
+{% block title %}Mi Perfil - Urappi{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-6xl">
+    <h1 class="text-3xl font-bold mb-8 text-center text-primary">Mi Perfil</h1>
+    
+    <!-- Grid responsivo según el rol del usuario -->
+    <div class="grid grid-cols-1 lg:grid-cols-{% if usuario.rol == 'seller' %}3{% else %}2{% endif %} gap-8">
+        
+        <!-- Información personal -->
+        <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title text-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Información Personal
+                </h2>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Nombre:</span>
+                        <span class="font-semibold">{{ usuario.username }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Apodo:</span>
+                        <span class="font-semibold">{{ usuario.apodo }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Pronombres:</span>
+                        <span class="font-semibold">{{ usuario.pronombre }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Email:</span>
+                        <span class="font-semibold">{{ usuario.email }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Rol:</span>
+                        <span class="badge 
+                            {% if usuario.rol == 'customer' %}badge-primary
+                            {% elif usuario.rol == 'deliver' %}badge-secondary
+                            {% elif usuario.rol == 'seller' %}badge-accent
+                            {% else %}badge-neutral{% endif %}">
+                            {% if usuario.rol == 'customer' %}Cliente
+                            {% elif usuario.rol == 'deliver' %}Repartidor
+                            {% elif usuario.rol == 'seller' %}Vendedor
+                            {% else %}{{ usuario.rol }}{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UPuntos y recarga (universal) -->
+        <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                    </svg>
+                    Mis UPuntos
+                </h2>
+                
+                <!-- Saldo actual -->
+                <div class="text-center py-6">
+                    <div class="text-4xl font-bold text-success">${{ usuario.upuntos }}</div>
+                    <div class="text-base-content/70">UPuntos disponibles</div>
+                </div>
+                
+                <!-- Formulario de recarga -->
+                <form method="post" action="{% url 'recharge_upuntos' %}" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Recargar UPuntos</span>
+                        </label>
+                        <input type="number" 
+                               name="amount" 
+                               placeholder="Ingresa el monto" 
+                               class="input input-bordered input-primary"
+                               min="1" 
+                               max="100000" 
+                               required>
+                        <label class="label">
+                            <span class="label-text-alt text-base-content/60">Monto mínimo: $1 - Máximo: $100,000</span>
+                        </label>
+                    </div>
+                    
+                    <!-- Botones de recarga rápida -->
+                    <div class="grid grid-cols-3 gap-2 mb-4">
+                        <button type="button" 
+                                class="btn btn-outline btn-sm"
+                                onclick="document.querySelector('input[name=amount]').value = 5000">
+                            $5,000
+                        </button>
+                        <button type="button" 
+                                class="btn btn-outline btn-sm"
+                                onclick="document.querySelector('input[name=amount]').value = 10000">
+                            $10,000
+                        </button>
+                        <button type="button" 
+                                class="btn btn-outline btn-sm"
+                                onclick="document.querySelector('input[name=amount]').value = 20000">
+                            $20,000
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Recargar UPuntos
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Información específica para vendedores -->
+        {% if usuario.rol == 'seller' %}
+        <div class="card bg-base-100 shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title text-accent">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    Mi Tienda
+                </h2>
+                
+                {% if tienda %}
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Nombre:</span>
+                        <span class="font-semibold">{{ tienda.shopName }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Ubicación:</span>
+                        <span class="font-semibold">{{ tienda.location }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-base-content/70">Horario:</span>
+                        <span class="font-semibold">{{ tienda.openTime }} - {{ tienda.closingTime }}</span>
+                    </div>
+                    
+                    <div class="card-actions">
+                        <a href="{% url 'vendedor' %}" class="btn btn-accent btn-sm">
+                            Ver mi tienda
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <p class="text-base-content/70">No tienes una tienda asociada</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Accesos rápidos según el rol -->
+    <div class="card bg-base-100 shadow-lg mt-8">
+        <div class="card-body">
+            <h2 class="card-title text-neutral">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Accesos Rápidos
+            </h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                {% if usuario.rol == 'customer' %}
+                    <a href="{% url 'comprador' %}" class="btn btn-outline btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        Ver Tiendas
+                    </a>
+                    <a href="/comprador/cart" class="btn btn-outline btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6 0v1a1 1 0 11-2 0v-1m2 0a1 1 0 100-2H9.5a1 1 0 100 2h4z" />
+                        </svg>
+                        Mi Carrito
+                    </a>
+                {% elif usuario.rol == 'deliver' %}
+                    <a href="{% url 'repartidor' %}" class="btn btn-outline btn-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Órdenes Pendientes
+                    </a>
+                {% elif usuario.rol == 'seller' %}
+                    <a href="{% url 'vendedor' %}" class="btn btn-outline btn-accent">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        Administrar Tienda
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mostrar mensajes -->
+{% if messages %}
+    <div class="toast toast-top toast-end z-50">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-error{% endif %}">
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
