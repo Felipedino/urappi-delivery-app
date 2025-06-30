@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.paginator import Paginator
 
 from urappiapp.models import (
     Cart,
@@ -17,8 +18,13 @@ from urappiapp.models import (
 # Vista que muestra el listado de tiendas
 def show_listado_tiendas(request):
     tiendas = Shop.objects.all()
+    shopsPerPage = 3
+    paginator = Paginator(tiendas, shopsPerPage)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-    info = {"usuario": request.user, "tiendas": tiendas}
+    info = {"usuario": request.user, "tiendas": page_obj}
+    print(page_obj.object_list)
 
     return render(request, "app_comprador/stores_view.html", info)
 
@@ -57,15 +63,17 @@ def add_to_cart(request):
     if request.method == "POST":
         product_id = int(request.POST.get("product_name"))
         quantity = int(request.POST.get("quantity", 1))
-
+        print("post request sent")
         try:
             # Busca el producto por nombre (puede ser problemático hacerlo así si hay dos productos con el mismo nombre)
             product = Product.objects.get(productID=product_id)
             # Se busca el ProductListing asociado
             product_listing = ProductListing.objects.get(listedProduct=product)
         except Product.DoesNotExist:
+            print("product dne")
             return redirect(request.META.get("HTTP_REFERER", "/"))
         except ProductListing.DoesNotExist:
+            print("listing dne")
             return redirect(request.META.get("HTTP_REFERER", "/"))
 
         cart, _ = Cart.objects.get_or_create(user=request.user)
@@ -77,6 +85,7 @@ def add_to_cart(request):
             cart_item.save()
 
         return redirect(request.META.get("HTTP_REFERER", "/"))
+    
     else:
         return redirect("/")
 
@@ -90,6 +99,7 @@ def show_cart(request):
             "product_listing__listedProduct", "product_listing__listedBy"
         )
     except Cart.DoesNotExist:
+        print("cart does not exist")
         items = []
 
     # Añadir el subtotal a cada item

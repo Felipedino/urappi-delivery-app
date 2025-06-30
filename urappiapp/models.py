@@ -26,6 +26,7 @@ class Shop(models.Model):
     shopName = models.CharField(max_length=32)  # Nombre de la tienda
     shopImage = models.ImageField(upload_to="stores/", null=True, blank=True)  # Imagen de la tienda
     location = models.TextField()  # Ubicación de la tienda
+    rating = models.FloatField(default=0.0)
 
     def __str__(self):
         return self.shopName
