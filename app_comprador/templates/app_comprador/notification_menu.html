@@ -1,0 +1,19 @@
+<!-- Pagina con menú de la tienda -->
+{% extends 'urappi/base.html' %}
+
+{% block title %}Menú{% endblock %}
+
+{% block content %}
+
+<!-- Sección: Listado de notificaciones -->
+<div class="px-4">
+  <div class="list items-center w-full gap-2">
+      {% for notification in notifications %}
+          {% include "app_comprador/notifications_menu/_notification_info.html" with notification=notification %}
+      {% empty %}
+          <p class="text-center text-gray-500 py-8">No tienes notificaciones</p>
+      {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}

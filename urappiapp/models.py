@@ -9,6 +9,8 @@ class User(AbstractUser):
     pronombres = [("La", "La"), ("El", "El"), ("Le", "Le"), ("Otro", "Otro")]
     pronombre = models.CharField(max_length=5, choices=pronombres)
     apodo = models.CharField(max_length=30)  # Apodo o nombre visible
+    rating = models.FloatField(default=0.0)
+    votes = models.IntegerField(default=0)
 
     rol = models.CharField(max_length=20, choices=[
         ('customer', 'Cliente'),
@@ -26,6 +28,8 @@ class Shop(models.Model):
     shopName = models.CharField(max_length=32)  # Nombre de la tienda
     shopImage = models.ImageField(upload_to="stores/", null=True, blank=True)  # Imagen de la tienda
     location = models.TextField()  # Ubicación de la tienda
+    rating = models.FloatField(default=0.0)
+    votes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.shopName
@@ -81,6 +85,7 @@ class Order(models.Model):
     deliveryLocation = models.TextField()
     status = models.IntegerField()  # Estado de la orden (puede ser un enum)
     deliveryInstructions = models.TextField(blank=True, null=True)  # Instrucciones de entrega (puede ser vacío)
+    rated = models.BooleanField(default=False)
 
 
 class OrderItem(models.Model):
@@ -89,13 +94,11 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     price = models.PositiveIntegerField()  # Precio al momento de la compra
 
-
 # Modelo de entrega (delivery)
 class Delivery(models.Model):
     deliveryRating = models.FloatField()  # Calificación de la entrega
     notes = models.TextField()  # Notas adicionales
     status = models.IntegerField()  # Estado de la entrega (puede ser un enum)
-
 
 # Modelo del carrito
 class Cart(models.Model):
@@ -116,7 +119,6 @@ class Cart(models.Model):
             for item in self.items.all()
         )
 
-
 # Modelo para el contenido del carrito
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
@@ -130,3 +132,21 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product_listing.listedProduct.productName}"
+
+# Modelo para notificaciones
+class Notification(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user", null=True
+    )
+    deliverer = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notification_emitter", null=True
+    )
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="order", null=True
+    )
+
+    message = models.TextField()
+    types = [("entregado", "Pedido entregado"), ("cancelado", "Pedido cancelado"), ("aceptado", "Pedido aceptado")]
+    type = models.CharField(max_length=20, choices=types, null=True)
+    status = models.CharField(max_length=20, default="unread")
+    created_at = models.TimeField(null=True)

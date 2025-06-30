@@ -54,4 +54,22 @@
         {% endif %}
     </div>
 </div>
+
+<div class="fixed bottom-0 left-0 right-0 flex justify-center p-4 bg-base-100/80 backdrop-blur-sm border-t border-base-200">
+  <div class="join shadow-lg">
+    {% if page_obj.has_previous %}
+      <a href="?page=1" class="join-item btn">«</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="join-item btn">‹</a>
+    {% endif %}
+    
+    <span class="join-item btn pointer-events-none">
+      Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+    </span>
+    
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="join-item btn">›</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" class="join-item btn">»</a>
+    {% endif %}
+  </div>
+</div>
 {% endblock content %}

@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.paginator import Paginator
 from django.db import transaction
 
 from urappiapp.models import (
@@ -13,16 +14,21 @@ from urappiapp.models import (
     Product,
     ProductListing,
     Shop,
+    Notification,
+    User,
 )
 
 
 # Vista que muestra el listado de tiendas
 def show_listado_tiendas(request):
     tiendas = Shop.objects.all()
+    shopsPerPage = 3
+    paginator = Paginator(tiendas, shopsPerPage)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-    
-
-    info = {"usuario": request.user,"tiendas": tiendas}
+    info = {"usuario": request.user, "tiendas": page_obj}
+    print(page_obj.object_list)
 
     return render(request, "app_comprador/stores_view.html", info)
 
@@ -37,6 +43,7 @@ def show_store_menu(request, id):
         pathFoto = "/media/" + str(pl.listedProduct.prodImage)
         productos.append(
             {
+                "ProductID": pl.listedProduct.productID,
                 "ProductName": pl.listedProduct.productName,
                 "id": pl.listedProduct.productID,
                 "priceCLP": pl.listedProduct.priceCLP,
@@ -44,7 +51,6 @@ def show_store_menu(request, id):
                 "prodImage": pathFoto,
             }
         )
-
 
     info = {
         "tienda_id": id,
@@ -60,9 +66,7 @@ def show_store_menu(request, id):
 @login_required(login_url="/login")
 def add_to_cart(request):
     if request.method == "POST":
-        print(request.POST)
-    if request.method == "POST":
-        product_id = request.POST.get("product_id")  # <-- CAMBIA "product_name" por "product_id"
+        product_id = request.POST.get("product_id")
         quantity = int(request.POST.get("quantity", 1))
 
         try:
@@ -82,6 +86,7 @@ def add_to_cart(request):
             cart_item.save()
 
         return redirect(request.META.get("HTTP_REFERER", "/"))
+
     else:
         return redirect("/")
 
@@ -209,3 +214,52 @@ def create_order(request):
 
     else:
         return redirect("cart") # Si por alguna razon no se realiza un post y se accede a esta función, no pasa nada y el usuario permanece en el carrito
+
+# Vista para mostrar notificaciones
+@login_required(login_url="/login")
+def show_notifications(request):
+    notifications = []
+    try:
+        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    except Notification.DoesNotExist:
+        print("notification does not exist!")
+
+    context = {
+        "notifications": notifications
+    }
+    return render(request, "app_comprador/notification_menu.html", context)
+
+@login_required(login_url='/login')
+def delete_notification(request, notification_id):
+    print("delete_notification called")
+    if request.method == "POST":
+        notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+        notification.delete()
+        return redirect("/")
+
+@login_required(login_url='/login')
+def rate_deliverer(request, deliverer_id):
+    if request.method == "POST":
+        rating = int(request.POST.get('rating'))
+        order_id = request.POST.get('order_id')
+
+        if rating < 1 or rating > 5:
+            return
+
+        # objects
+        deliverer = get_object_or_404(User, id=deliverer_id)
+        order = get_object_or_404(Order, id=order_id)
+
+        # update rating
+        sum = deliverer.rating * deliverer.votes
+        sum += rating
+        deliverer.votes += 1
+        deliverer.rating = sum / deliverer.votes
+        deliverer.save()
+
+        # mark order as rated
+        order.rated = True
+        order.save()
+
+        print("new rating: ", deliverer.rating)
+        return redirect("/")
