@@ -7,7 +7,7 @@
 
 <!-- Sección: Listado de notificaciones -->
 <div class="px-4">
-  <div class="list items-center w-full">
+  <div class="list items-center w-full gap-2">
       {% for notification in notifications %}
           {% include "app_comprador/notifications_menu/_notification_info.html" with notification=notification %}
       {% empty %}

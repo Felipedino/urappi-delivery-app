@@ -1,7 +1,7 @@
 <!-- Este html corresponde a cada cuadro con información de la notificación correspondiente -->
 {% load static %}
 <!-- Mensaje según el tipo -->
-<div class="max-w-md rounded-lg bg-white shadow-md relative">
+<div class="w-full max-w-lg rounded-lg bg-white shadow-md relative">
     <button class="absolute top-1 right-1 p-1 rounded-full hover:bg-gray-100 transition-colors" id="delete-notif-button" onclick="deleteNotifRequest()">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 hover:text-red-500" 
             viewBox="0 0 20 20" fill="currentColor">
@@ -13,13 +13,29 @@
     <div class="textarea-md p-6">
         {% if notification.type == "entregado" %}
             <h3 class="text-xl font-bold">¡Tu pedido ha sido entregado!</h3>
-            <p>sample text!!!!</p>
         {% elif notification.type == "cancelado" %}
             <h3 class="text-xl font-bold">Tu pedido ha sido cancelado :c</h3>
-            <p>sample text!!!!</p>
         {% elif notification.type == "aceptado" %}
             <h3 class="text-xl font-bold">¡Tu pedido está en camino!</h3>
-            <p>sample text!!!!</p>
+        {% endif %}
+        <p> {{notification.message}} </p>
+
+        {% if notification.type == "entregado" and notification.order.rated == False %}
+            {% if notification.order.deliverer %}
+            <form method="post" action="{% url 'rate_deliverer' notification.order.deliverer.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" value="{{ notification.order.id }}">
+                    
+                <div class="rating-stars">
+                    <span>Califica esta entrega: </span>
+                    {% for i in "12345" %}
+                        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" {% if forloop.first %}checked{% endif %}>
+                        <label for="star{{ i }}">★</label>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary"> Enviar calificación </button>
+            </form>
+            {% endif %}
         {% endif %}
     </div>
 

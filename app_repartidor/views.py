@@ -141,7 +141,9 @@ def delivery_action(request):
         #Si entrega, estatus del pedido será Entregado(3)
         if action == "accept":
             order.status = 3  # Estado entregado
+            order.deliverer = request.user
             order.save()
+            NotificationBroker.notificateDeliveredOrder(order, request.user, order.customer)
             messages.success(request, "Pedido marcado como entregado")
         
         
