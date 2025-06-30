@@ -8,6 +8,8 @@ from django.core.paginator import Paginator
 from urappiapp.models import Order
 from urappiapp.serializers import *
 
+from urappiapp.util import NotificationBroker
+
 ## Renderizamos páginas para repartidores, con órdenes pendientes
 def repartidor_perfil(request):
     orders = Order.objects.filter(status=1)
@@ -31,6 +33,7 @@ def repartidor_perfil(request):
 def accepted_order(request):
     order_id = request.POST.get("order_id")
     action = request.POST.get("action")
+    deliverer = request.user
     
     #manejar error de id inválida
     if not order_id:
@@ -50,10 +53,14 @@ def accepted_order(request):
             order_to_be_modified.status = 2  # Estado aceptado
             order_to_be_modified.save()
             messages.success(request, "Pedido aceptado con éxito")
+
+            # send notification
+            user = order_to_be_modified.customer
+            NotificationBroker.notificateAcceptedOrder(order_to_be_modified, deliverer, user)
+
             return redirect('app_repartidor:estado_order', order_id=order_id)
         
         #Si se rechaza, mantener estatus del pedido     
-
         elif action == "reject":
             order_to_be_modified.status = 1
             order_to_be_modified.save()
@@ -134,7 +141,9 @@ def delivery_action(request):
         #Si entrega, estatus del pedido será Entregado(3)
         if action == "accept":
             order.status = 3  # Estado entregado
+            order.deliverer = request.user
             order.save()
+            NotificationBroker.notificateDeliveredOrder(order, request.user, order.customer)
             messages.success(request, "Pedido marcado como entregado")
         
         

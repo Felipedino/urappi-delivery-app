@@ -12,6 +12,8 @@ from urappiapp.models import (
     Product,
     ProductListing,
     Shop,
+    Notification,
+    User,
 )
 
 
@@ -154,10 +156,6 @@ def update_cart(request, item_id, action):
     # Redireccionar de vuelta al carrito
     return redirect("cart")
 
-
-login_required(login_url="/login")
-
-
 # Vista para crear orden al comprar carrito
 def create_order(request):
     # Obtener el carrito del usuario
@@ -194,3 +192,52 @@ def create_order(request):
     cart_items.delete()
 
     return redirect("home")
+
+# Vista para mostrar notificaciones
+@login_required(login_url="/login")
+def show_notifications(request):
+    notifications = []
+    try:
+        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    except Notification.DoesNotExist:
+        print("notification does not exist!")
+    
+    context = {
+        "notifications": notifications
+    }
+    return render(request, "app_comprador/notification_menu.html", context)
+
+@login_required(login_url='/login')
+def delete_notification(request, notification_id):
+    print("delete_notification called")
+    if request.method == "POST":
+        notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+        notification.delete()
+        return redirect("/")
+    
+@login_required(login_url='/login')
+def rate_deliverer(request, deliverer_id):
+    if request.method == "POST":
+        rating = int(request.POST.get('rating'))
+        order_id = request.POST.get('order_id')
+
+        if rating < 1 or rating > 5:
+            return
+        
+        # objects
+        deliverer = get_object_or_404(User, id=deliverer_id)
+        order = get_object_or_404(Order, id=order_id)
+
+        # update rating
+        sum = deliverer.rating * deliverer.votes
+        sum += rating
+        deliverer.votes += 1
+        deliverer.rating = sum / deliverer.votes
+        deliverer.save()
+
+        # mark order as rated
+        order.rated = True
+        order.save()
+
+        print("new rating: ", deliverer.rating)
+        return redirect("/")
