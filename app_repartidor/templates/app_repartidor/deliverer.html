@@ -18,7 +18,7 @@
                     <div class="flex items-center mb-4">
                       
                         <div class="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0">
-                            <img src="{% static pedido.imageURL %}" alt="Imagen del Pedido" class="w-full h-full object-cover">
+                            <img src="{{ pedido.product_list.0.prodImage.url }}" alt="Imagen del Pedido" class="w-full h-full object-cover">
                         </div>
                         
                        

@@ -25,5 +25,6 @@ class OrderItemSerializer:
         return {
             "productName": item.product.productName,
             "description": item.product.description,
-            "priceCLP": item.product.priceCLP
+            "priceCLP": item.product.priceCLP,
+            "prodImage": item.product.prodImage,
         }

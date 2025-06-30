@@ -1,8 +1,20 @@
 <header class="bg-gradient-to-r from-primary to-secondary text-white">
     <!-- header elements -->
      {% load static %}
+
+    {% if user.is_authenticated %}
+        {% if user.rol == "customer" %}
+            {% url 'home' as logo_url %}
+        {% elif user.rol == "seller" %}
+            {% url 'repartidor_perfil' as logo_url %}
+        {% else %}
+            {% url 'show_my_store' as logo_url %}
+        {% endif %}
+    {% else %}
+        {% url 'home' as logo_url %}
+    {% endif %}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <a href="{% url 'home' %}">
+        <a href="{{ logo_url }}">
             <img src="{% static 'images/logo.png' %}" alt="Urappi Logo" class="h-16 object-contain">
         </a>
 
