@@ -39,13 +39,13 @@ def show_store_menu(request, id):
         pathFoto = "/media/" + str(pl.listedProduct.prodImage)
         productos.append(
             {
+                "ProductID": pl.listedProduct.productID,
                 "ProductName": pl.listedProduct.productName,
                 "priceCLP": pl.listedProduct.priceCLP,
                 "description": pl.listedProduct.description,
                 "prodImage": pathFoto,
             }
         )
-
 
     info = {
         "tienda_id": id,
@@ -61,12 +61,12 @@ def show_store_menu(request, id):
 @login_required(login_url="/login")
 def add_to_cart(request):
     if request.method == "POST":
-        product_name = request.POST.get("product_name")
+        product_id = int(request.POST.get("product_name"))
         quantity = int(request.POST.get("quantity", 1))
         print("post request sent")
         try:
             # Busca el producto por nombre (puede ser problemático hacerlo así si hay dos productos con el mismo nombre)
-            product = Product.objects.get(productName=product_name)
+            product = Product.objects.get(productID=product_id)
             # Se busca el ProductListing asociado
             product_listing = ProductListing.objects.get(listedProduct=product)
         except Product.DoesNotExist:
@@ -110,12 +110,13 @@ def show_cart(request):
 
     info = {
         "usuario": request.user,
-        "cart_items": items
+        "cart_items": items,
+        "total_price": total_price,
     }
     return render(
         request,
         "app_comprador/cart.html",
-         info,
+        info,
     )
 
 
