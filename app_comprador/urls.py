@@ -12,4 +12,7 @@ urlpatterns = [
         "update_cart/<int:item_id>/<str:action>/", views.update_cart, name="update_cart"
     ),
     path("create_order/", views.create_order, name="create_order"),
+    path("notifications/", views.show_notifications, name="show_notifications"),
+    path('delete-notification/<int:notification_id>/', views.delete_notification, name='delete_notification'),
+    path('rate-deliverer/<int:deliverer_id>/', views.rate_deliverer, name='rate_deliverer')
 ]

@@ -9,6 +9,8 @@ class User(AbstractUser):
     pronombres = [("La", "La"), ("El", "El"), ("Le", "Le"), ("Otro", "Otro")]
     pronombre = models.CharField(max_length=5, choices=pronombres)
     apodo = models.CharField(max_length=30)  # Apodo o nombre visible
+    rating = models.FloatField(default=0.0)
+    votes = models.IntegerField(default=0)
 
     rol = models.CharField(
         max_length=20,
@@ -32,6 +34,8 @@ class Shop(models.Model):
         upload_to="stores/", null=True, blank=True
     )  # Imagen de la tienda
     location = models.TextField()  # Ubicación de la tienda
+    rating = models.FloatField(default=0.0)
+    votes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.shopName
@@ -104,6 +108,10 @@ class Order(models.Model):
     total_amount = models.IntegerField(default=0)  # Total general
     shop_paid = models.BooleanField(default=False)  # Si se ha pagado a la tienda
     deliverer_paid = models.BooleanField(default=False)  # Si se ha pagado al repartidor
+    deliveryInstructions = models.TextField(
+        blank=True, null=True
+    )  # Instrucciones de entrega (puede ser vacío)
+    rated = models.BooleanField(default=False)
 
 
 class OrderItem(models.Model):
@@ -153,3 +161,32 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product_listing.listedProduct.productName}"
+
+
+# Modelo para notificaciones
+class Notification(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="user",
+        null=True,
+    )
+    deliverer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="notification_emitter",
+        null=True,
+    )
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="order", null=True
+    )
+
+    message = models.TextField()
+    types = [
+        ("entregado", "Pedido entregado"),
+        ("cancelado", "Pedido cancelado"),
+        ("aceptado", "Pedido aceptado"),
+    ]
+    type = models.CharField(max_length=20, choices=types, null=True)
+    status = models.CharField(max_length=20, default="unread")
+    created_at = models.TimeField(null=True)

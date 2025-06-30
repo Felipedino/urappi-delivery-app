@@ -1,20 +1,30 @@
 from datetime import date, datetime
 
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_POST
 
 from urappiapp.models import Order
 from urappiapp.serializers import *
+from urappiapp.util import NotificationBroker
 
 
 ## Renderizamos páginas para repartidores, con órdenes pendientes
 def repartidor_perfil(request):
     orders = Order.objects.filter(status=1)
+    ordersPerPage = 7
+    paginator = Paginator(orders, ordersPerPage)
     # Desplegar las ordenes pendientes
-    pending_orders = [OrderSerializer.to_json(order) for order in orders]
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    pending_orders = [OrderSerializer.to_json(order) for order in page_obj]
 
-    context = {"usuario": request.user, "pending_orders": pending_orders}
+    context = {
+        "usuario": request.user,
+        "pending_orders": pending_orders,
+        "page_obj": page_obj,
+    }
 
     return render(request, "app_repartidor/deliverer.html", context)
 
@@ -24,13 +34,14 @@ def repartidor_perfil(request):
 def accepted_order(request):
     order_id = request.POST.get("order_id")
     action = request.POST.get("action")
+    deliverer = request.user
 
-    # manejar error de id inválida
+    # Manejar error de id inválida
     if not order_id:
         messages.error(request, "Error: ID de pedido no encontrado")
         return redirect("app_repartidor:repartidor_perfil")
 
-    # manejar error sin acción generada (buttons)
+    # Manejar error sin acción generada (buttons)
     if not action:
         messages.error(request, "Error: Acción no especificada")
         return redirect("app_repartidor:repartidor_perfil")
@@ -64,6 +75,10 @@ def accepted_order(request):
                 order.shop_paid = True
 
             order.save()
+
+            # Enviar notificación al usuario
+            NotificationBroker.notificateAcceptedOrder(order, deliverer, order.customer)
+
             messages.success(request, "Pedido aceptado con éxito")
             return redirect("app_repartidor:estado_order", order_id=order_id)
 
@@ -163,6 +178,12 @@ def delivery_action(request):
                 order.deliverer_paid = True
 
             order.save()
+
+            # Enviar notificación
+            NotificationBroker.notificateDeliveredOrder(
+                order, request.user, order.customer
+            )
+
             messages.success(
                 request,
                 "Pedido marcado como entregado. Has recibido 1,500 UPuntos por el envío.",
