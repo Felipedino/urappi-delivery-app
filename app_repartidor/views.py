@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_POST
 
-from urappiapp.models import Order
+from urappiapp.models import Order, OrderItem, ShopOwner
 from urappiapp.serializers import *
 from urappiapp.util import NotificationBroker
 
