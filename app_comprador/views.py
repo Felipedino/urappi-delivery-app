@@ -12,6 +12,7 @@ from urappiapp.models import (
     Product,
     ProductListing,
     Shop,
+    Notification,
 )
 
 
@@ -194,3 +195,25 @@ def create_order(request):
     cart_items.delete()
 
     return redirect("home")
+
+# Vista para mostrar notificaciones
+@login_required(login_url="/login")
+def show_notifications(request):
+    notifications = []
+    try:
+        notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
+    except Notification.DoesNotExist:
+        print("notification does not exist!")
+    
+    context = {
+        "notifications": notifications
+    }
+    return render(request, "app_comprador/notification_menu.html", context)
+
+@login_required(login_url='/login')
+def delete_notification(request, notification_id):
+    print("delete_notification called")
+    if request.method == "POST":
+        notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+        notification.delete()
+        return redirect("/")

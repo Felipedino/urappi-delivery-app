@@ -133,9 +133,17 @@ class CartItem(models.Model):
 
 class Notification(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notification"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user", null=True
     )
+    deliverer = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notification_emitter", null=True
+    )
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="order", null=True
+    )
+
     message = models.TextField()
-    type = [("entregado", "Pedido entregado"), ("cancelado", "Pedido cancelado"), ("aceptado", "Pedido aceptado")]
+    types = [("entregado", "Pedido entregado"), ("cancelado", "Pedido cancelado"), ("aceptado", "Pedido aceptado")]
+    type = models.CharField(max_length=20, choices=types, null=True)
     status = models.CharField(max_length=20, default="unread")
     created_at = models.TimeField(null=True)
