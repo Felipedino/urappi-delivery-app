@@ -130,3 +130,12 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product_listing.listedProduct.productName}"
+
+class Notification(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notification"
+    )
+    message = models.TextField()
+    type = [("entregado", "Pedido entregado"), ("cancelado", "Pedido cancelado"), ("aceptado", "Pedido aceptado")]
+    status = models.CharField(max_length=20, default="unread")
+    created_at = models.TimeField(null=True)
