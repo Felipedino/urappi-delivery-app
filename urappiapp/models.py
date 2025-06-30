@@ -39,6 +39,7 @@ class ShopOwner(models.Model):
     owner = models.ForeignKey( User, on_delete=models.CASCADE)  # Usuario dueño de la tienda
     shop = models.ForeignKey( Shop, on_delete=models.CASCADE ) 
 
+
 # Modelo que representa un producto
 class Product(models.Model):
     categorys = [("beb-cal", "Bebidas calientes"), ("beb-fria", "Bebidas frías"), ("pas-boll", "Pastelería y Bollería"), ("sandw", "Sandwiches"), ("otro", "Otro")]
@@ -83,6 +84,7 @@ class Order(models.Model):
     deliveredAt = models.DateTimeField(null=True)  # Fecha de entrega
     deliveryLocation = models.TextField()
     status = models.IntegerField()  # Estado de la orden (puede ser un enum)
+    deliveryInstructions = models.TextField(blank=True, null=True)  # Instrucciones de entrega (puede ser vacío)
     rated = models.BooleanField(default=False)
 
 

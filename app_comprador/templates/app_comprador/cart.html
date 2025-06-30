@@ -3,80 +3,123 @@
 
 {% block content %}
 <div class="max-w-3xl mx-auto py-8 px-4">
-    <h2 class="text-3xl font-bold mb-8 text-center text-primary">Tu Carrito</h2>
+  <h2 class="text-3xl font-bold mb-8 text-center text-primary">Tu Carrito</h2>
 
-    {% if cart_items %}
-    <div class="space-y-6">
-        {% for item in cart_items %}
-        <div class="card flex flex-row items-center bg-base-100 shadow-md rounded-xl p-4">
-            <img src="{{ item.product_listing.listedProduct.prodImage.url }}" alt="{{ item.product_listing.listedProduct.productName }}"
-                 class="w-24 h-24 object-cover rounded-lg mr-6 border border-base-300">
-            <div class="flex-1">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-bold text-base-content">{{ item.product_listing.listedProduct.productName }}</h3>
-                    <span class="text-primary font-semibold text-xl">${{ item.product_listing.listedProduct.priceCLP }}</span>
-                </div>
-                <p class="text-sm text-base-content/70 mt-2">{{ item.product_listing.listedProduct.description }}</p>
-                
-                <div class="flex items-center mt-3 justify-between">
-                    <!-- Control de cantidad -->
-                    <div class="flex items-center gap-4">
-                        <!-- Join para agrupar los botones de cantidad -->
-                        <div class="join bg-base-200 rounded-lg">
-                            <form method="post" action="{% url 'update_cart' item.id 'decrease' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="join-item btn btn-sm btn-ghost">-</button>
-                            </form>
-                            
-                            <div class="join-item flex items-center justify-center px-4 font-medium">
-                                {{ item.quantity }}
-                            </div>
-                            
-                            <form method="post" action="{% url 'update_cart' item.id 'increase' %}">
-                                {% csrf_token %}
-                                <button type="submit" class="join-item btn btn-sm btn-ghost">+</button>
-                            </form>
-                        </div>
-                        
-                        <!-- Botón de eliminar -->
-                        <form method="post" action="{% url 'remove_from_cart' item.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-ghost btn-sm text-error">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                            </button>
-                        </form>
+  {% if cart_items %}   <!-- Si hay ítems en la tienda, se entra al bloque -->
+    {% if cart_items_by_shop %}
+      <div class="space-y-12">
+        {% for shop, items in cart_items_by_shop.items %}   <!-- Los ítems se separan por tienda -->
+          <div class="mb-6">
+            <h3 class="text-xl font-bold mb-4 text-primary">{{ shop.shopName }}</h3>
+
+            <div class="space-y-6">
+              {% for item in items %}   <!-- Por cada item se muestra un widget -->
+                <div class="card flex flex-row items-center bg-base-100 shadow rounded-xl p-4">
+                  <img src="{{ item.product_listing.listedProduct.prodImage.url }}"
+                       alt="{{ item.product_listing.listedProduct.productName }}"
+                       class="w-24 h-24 object-cover rounded-lg mr-6 border border-base-300">
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between">
+                      <h3 class="text-lg font-bold text-base-content">
+                        {{ item.product_listing.listedProduct.productName }}
+                      </h3>
+                      <span class="text-sm text-gray-500">
+                        ${{ item.product_listing.listedProduct.priceCLP }} c/u
+                      </span>
                     </div>
-                    
-                    <span class="text-base-content/70 text-sm">Total: ${{ item.subtotal }}</span>
+
+                    <p class="text-sm text-base-content/70 mt-2">
+                      {{ item.product_listing.listedProduct.description }}
+                    </p>
+
+                    <div class="flex items-center justify-between mt-3">
+                      <!-- Cantidad +/- -->
+                      <div class="flex items-center gap-4">
+                        <div class="join bg-base-200 rounded-lg">
+                          <form method="post" action="{% url 'update_cart' item.id 'decrease' %}">
+                            {% csrf_token %}
+                            <button class="join-item btn btn-sm btn-ghost">-</button>
+                          </form>
+
+                          <div class="join-item flex items-center justify-center px-4 font-medium">
+                            {{ item.quantity }}
+                          </div>
+
+                          <form method="post" action="{% url 'update_cart' item.id 'increase' %}">
+                            {% csrf_token %}
+                            <button class="join-item btn btn-sm btn-ghost">+</button>
+                          </form>
+                        </div>
+
+                        <form method="post" action="{% url 'remove_from_cart' item.id %}">   <!-- Botón para eliminar todas las existencias de un tipo de producto del carrito -->
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-ghost btn-sm text-error btn-circle" aria-label="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4
+                                       a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </form>
+                      </div>
+
+                      <span class="text-xl font-bold text-primary">
+                        ${{ item.subtotal }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
+              {% endfor %}
             </div>
-        </div>
+          </div>
         {% endfor %}
-    </div>
-
-    <!-- Total general -->
-    <div class="mt-10 flex flex-col items-end">
-        <span class="text-xl font-semibold text-neutral-content">
-            Total: ${{ total_price }}
-        </span>
-        <div class="max-w-3xl mx-auto py-4 px-4 flex justify-end">
-            <div class="text-right">
-                <span class="text-lg font-bold text-primary">Total de la orden: ${{ total_price }}</span>
-            </div>
-        </div>
-        <form method="post" action="{% url 'create_order' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary mt-4">Enviar orden</button>
-        </form>
-    </div>
-    {% else %}
-    <div class="flex flex-col items-center justify-center py-20">
+      </div>
+    {% else %}   <!-- Si no hay ítems, se muestra una versión simplificada del carrito -->
+      <div class="flex flex-col items-center justify-center py-20">
         <p class="text-lg text-gray-500 mb-4">Tu carrito está vacío.</p>
-        <a href="{% url 'home' %}" class="btn btn-accent">Ir a la tienda</a>
-    </div>
+        <a href="{% url 'home' %}" class="btn btn-accent">Volver al inicio</a>
+      </div>
     {% endif %}
-</div>
 
+    <!-- Subtotal + Instrucciones -->
+    <div class="mt-10 max-w-2xl mx-auto">
+      <p class="text-center text-xl font-bold text-primary mb-6">
+        Subtotal de la orden: ${{ total_price }}
+      </p>
+
+      <form method="post" action="{% url 'create_order' %}">
+        {% csrf_token %}
+        <div class="flex flex-col gap-4">
+          {% for shop, items in cart_items_by_shop.items %}   <!-- Sección de instrucciones de entrega para cada tienda -->
+            <div tabindex="0"
+                 class="collapse collapse-arrow bg-base-100 shadow rounded-xl">
+              <input type="checkbox" class="peer" />
+              <div class="collapse-title text-base-content font-medium">
+                Instrucciones de entrega para
+                <span class="font-bold text-primary">{{ shop.shopName }}</span>:
+              </div>
+
+              <div class="collapse-content transition-all duration-300 peer-checked:max-h-60">
+                <textarea name="instructions_{{ forloop.counter }}"
+                          rows="2"
+                          class="textarea textarea-primary w-full resize-none"
+                          placeholder="Ej: Dejar en portería, llamar al llegar…"></textarea>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button type="submit" class="btn btn-primary">Enviar orden</button>
+        </div>
+      </form>
+    </div>
+  {% else %}   <!-- Se duplica la versión simplificada del carrito para evitar posibles errores futuros -->
+    <div class="flex flex-col items-center justify-center py-20">
+      <p class="text-lg text-gray-500 mb-4">Tu carrito está vacío.</p>
+      <a href="{% url 'home' %}" class="btn btn-accent">Volver al inicio</a>
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
