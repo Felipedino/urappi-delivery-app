@@ -7,7 +7,7 @@
         </a>
 
         <nav class="flex items-center space-x-6">
-        {% if user.rol != 'seller' %}
+        {% if user.rol == 'customer' %}
             <!-- Ícono Carrito -->
             <a href="{% url 'cart' %}" class="relative group ml-4 flex items-center">
                 <!-- Icono carrito (Heroicon) -->
