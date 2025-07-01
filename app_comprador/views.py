@@ -297,7 +297,7 @@ def delete_notification(request, notification_id):
             Notification, id=notification_id, user=request.user
         )
         notification.delete()
-        return redirect("/")
+        return redirect("show_notifications")
 
 
 @login_required(login_url="/login")
