@@ -4,13 +4,9 @@ from django.views.decorators.http import require_GET, require_POST
 
 from urappiapp.models import Product, ProductListing, Shop, ShopOwner
 
-
+# Vista para mostrar la información de la tienda del usuario logeado
 @login_required(login_url="/login")
 def show_my_store(request):
-
-    # Verificar si es un vendedor
-    # if not usuario.is_authenticated or usuario.rol != 'seller':
-    #    return HttpResponseForbidden("Solo los vendedores pueden acceder a esto.")
 
     shop_owner = ShopOwner.objects.filter(owner=request.user).first()
     if not shop_owner:
@@ -20,7 +16,6 @@ def show_my_store(request):
     productos_listados = ProductListing.objects.filter(listedBy=tienda)
     productos = []
     for pl in productos_listados:
-        pathFoto = "/media/" + str(pl.listedProduct.prodImage)
         productos.append(
             {
                 "productID": pl.listedProduct.productID,
@@ -42,11 +37,12 @@ def show_my_store(request):
     return render(request, "app_vendedor/my_store.html", info)
 
 
+# Lógica para agregar un producto nuevo a la tienda
 @login_required(login_url="/login")
 @require_POST
 def addNewProduct(request):
     if request.method == "POST":
-        shop_owner = ShopOwner.objects.filter(owner=request.user).first()
+        shop_owner = ShopOwner.objects.filter(owner=request.user).first() # busca la tienda acorde al usuario registrado
         shop = shop_owner.shop
 
         producto = request.POST["nombre_producto"]
@@ -74,6 +70,8 @@ def addNewProduct(request):
         return redirect("app_vendedor:show_my_store")
 
 
+# Lógica para modificar un producto que ya está registrado
+# Se puede modificar el nombre, precio, descripción y stock
 @login_required(login_url="/login")
 @require_POST
 def editProduct(request, productID):
@@ -104,6 +102,8 @@ def editProduct(request, productID):
     return redirect("app_vendedor:show_my_store")
 
 
+# Lógica para editar la información de la tienda
+# Solo se permite editar la ubicación, horario de apertura y cierre y descripción
 def editStore(request):
     if request.method == "POST":
         shop_owner = ShopOwner.objects.filter(owner=request.user).first()
