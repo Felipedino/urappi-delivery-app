@@ -18,7 +18,7 @@
     <!-- Formulario para agregar producto al carrito -->
     <form method="post" action="{% url 'add_to_cart' %}" class="flex items-center mt-3 space-x-2">
       {% csrf_token %}
-      <input type="hidden" name="product_name" value="{{ producto.ProductID }}">
+      <input type="hidden" name="product_id" value="{{ producto.id }}">
       <div class="flex items-center">
         <button type="button" onclick="changeQuantity(-1, '{{ counter }}')" class="btn btn-circle">-</button>
         <input id="quantity-{{ counter }}" name="quantity" type="number" style="width: 5ch;" class="input items-center text-center" size="2" value="1" min="1" readonly />
