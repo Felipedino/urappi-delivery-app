@@ -3,24 +3,30 @@
 
 <div class="hero bg-base-200 min-h-screen/2">
   <div class="hero-content flex-col lg:flex-row">
-     <img src="/media/{{tienda.shopImage}}" class="max-w-sm shadow-2xl" />
+     <img src="/media/{{tienda.shopImage}}" class="max-w-sm w-full rounded-xl shadow-md object-cover mb-6 md:mb-0 md:mr-10 border border-base-300 bg-white" />
 
-    <div id="store-info">
+    <div id="store-info" class="flex-1">
       <h1 class="text-xl font-bold">{{tienda.shopName}}</h1>
       <div id="info_tienda">
         <ul >{{ tienda.shopDescription }} </ul>
-        <ul>Ubicación: {{tienda.location}}</ul>  
+        <ul>Ubicación: {{tienda.location}}</ul>
         <ul>Horario: {{ tienda.openTime }} - {{ tienda.closingTime }}</ul>
       </div>
 
-      <div style="display: none;" id="editar_tienda">
+      <div id="edit-btn" class="mt-4">
+        <button type="button" class="btn btn-primary" onclick="modifyDesc()">Editar descripción</button>
+      </div>
+
+      <div style="display: none;" id="editar_tienda" class="mt-4">
         <form method="post" action="{% url 'app_vendedor:editStore' %}">
             {% csrf_token %}
             <div class="form-control mb-4" >
               <label class="label" for="descr_tienda">
                 <span class="label-text">Descripción</span>
               </label>
-              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea input-primary w-full" required>{{ tienda.shopDescription }}</textarea>
+
+              <textarea type="text" id="descr_tienda" name="descr_tienda" class="textarea textarea-primary w-full" required>{{ tienda.shopDescription }}</textarea>
+
             </div>
 
             <div class="form-control mb-4" >
@@ -34,14 +40,18 @@
               <label class="label" for="hora_apertura">
                 <span class="label-text">Hora de apertura</span>
               </label>
-              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-10" value="{{ tienda.openTime|time:'H:i' }}" required />
+
+              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-full" value="{{ tienda.openTime|time:'H:i' }}" required />
+
             </div>
 
             <div class="form-control mb-4">
               <label class="label" for="hora_cierre">
                 <span class="label-text">Hora de cierre</span>
               </label>
-              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-10" value="{{ tienda.closingTime|time:'H:i' }}" required />
+
+              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-full" value="{{ tienda.closingTime|time:'H:i' }}" required />
+
             </div>
 
             <div class="form-control mt-6">
@@ -49,18 +59,10 @@
             </div>
         </form>
       </div>
-
-    </div> 
-    <!--Queda por implementar este botón-->
-    <div id="edit-btn">
-      <button type="submit" class="btn btn-primary" onclick="modifyDesc()">Editar descripción</button>
     </div>
   </div>
-
-  
-
-  
 </div>
+
 <script>
   function modifyDesc(){
     // Se muestra el formulario para editar el producto
