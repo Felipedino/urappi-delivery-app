@@ -285,7 +285,8 @@ def show_notifications(request):
     except Notification.DoesNotExist:
         print("notification does not exist!")
 
-    context = {"notifications": notifications}
+    context = {"usuario":request.user
+               ,"notifications": notifications}
     return render(request, "app_comprador/notification_menu.html", context)
 
 
