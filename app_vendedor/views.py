@@ -27,7 +27,7 @@ def show_my_store(request):
                 "ProductName": pl.listedProduct.productName,
                 "priceCLP": pl.listedProduct.priceCLP,
                 "description": pl.listedProduct.description,
-                "prodImage": pathFoto,
+                "prodImage": pl.listedProduct.prodImage,
                 "stock": pl.stockQuantity,
             }
         )

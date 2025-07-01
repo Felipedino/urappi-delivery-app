@@ -20,7 +20,7 @@
               <label class="label" for="descr_tienda">
                 <span class="label-text">Descripción</span>
               </label>
-              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea input-primary w-9" required>{{ tienda.shopDescription }}</textarea>
+              <textarea type="text" id="descr_tienda" name="descr_tienda" class="input textarea input-primary w-full" required>{{ tienda.shopDescription }}</textarea>
             </div>
 
             <div class="form-control mb-4" >
@@ -34,14 +34,14 @@
               <label class="label" for="hora_apertura">
                 <span class="label-text">Hora de apertura</span>
               </label>
-              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-9" value="{{ tienda.openTime|time:'H:i' }}" required />
+              <input type="time" id="hora_apertura" name="hora_apertura" class="input time input-primary w-10" value="{{ tienda.openTime|time:'H:i' }}" required />
             </div>
 
             <div class="form-control mb-4">
               <label class="label" for="hora_cierre">
                 <span class="label-text">Hora de cierre</span>
               </label>
-              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-9" value="{{ tienda.closingTime|time:'H:i' }}" required />
+              <input type="time" id="hora_cierre" name="hora_cierre" class="input time input-primary w-10" value="{{ tienda.closingTime|time:'H:i' }}" required />
             </div>
 
             <div class="form-control mt-6">
