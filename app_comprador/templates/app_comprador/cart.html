@@ -5,15 +5,15 @@
 <div class="max-w-3xl mx-auto py-8 px-4">
   <h2 class="text-3xl font-bold mb-8 text-center text-primary">Tu Carrito</h2>
 
-  {% if cart_items %}   <!-- Si hay ítems en la tienda, se entra al bloque -->
+  {% if cart_items %}
     {% if cart_items_by_shop %}
       <div class="space-y-12">
-        {% for shop, items in cart_items_by_shop.items %}   <!-- Los ítems se separan por tienda -->
+        {% for shop, items in cart_items_by_shop.items %}
           <div class="mb-6">
             <h3 class="text-xl font-bold mb-4 text-primary">{{ shop.shopName }}</h3>
 
             <div class="space-y-6">
-              {% for item in items %}   <!-- Por cada item se muestra un widget -->
+              {% for item in items %}
                 <div class="card flex flex-row items-center bg-base-100 shadow rounded-xl p-4">
                   <img src="{{ item.product_listing.listedProduct.prodImage.url }}"
                        alt="{{ item.product_listing.listedProduct.productName }}"
@@ -33,25 +33,21 @@
                     </p>
 
                     <div class="flex items-center justify-between mt-3">
-                      <!-- Cantidad +/- -->
                       <div class="flex items-center gap-4">
                         <div class="join bg-base-200 rounded-lg">
                           <form method="post" action="{% url 'update_cart' item.id 'decrease' %}">
                             {% csrf_token %}
                             <button class="join-item btn btn-sm btn-ghost">-</button>
                           </form>
-
                           <div class="join-item flex items-center justify-center px-4 font-medium">
                             {{ item.quantity }}
                           </div>
-
                           <form method="post" action="{% url 'update_cart' item.id 'increase' %}">
                             {% csrf_token %}
                             <button class="join-item btn btn-sm btn-ghost">+</button>
                           </form>
                         </div>
-
-                        <form method="post" action="{% url 'remove_from_cart' item.id %}">   <!-- Botón para eliminar todas las existencias de un tipo de producto del carrito -->
+                        <form method="post" action="{% url 'remove_from_cart' item.id %}">
                           {% csrf_token %}
                           <button type="submit" class="btn btn-ghost btn-sm text-error btn-circle" aria-label="Eliminar">
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +59,6 @@
                           </button>
                         </form>
                       </div>
-
                       <span class="text-xl font-bold text-primary">
                         ${{ item.subtotal }}
                       </span>
@@ -78,83 +73,79 @@
 
       <!-- Desglose de costos -->
       <div class="card bg-base-100 shadow-md rounded-xl p-6 mt-8">
-          <h3 class="text-lg font-bold mb-4">Resumen de la Compra</h3>
-          <div class="space-y-2">
-              <div class="flex justify-between">
-                  <span>Subtotal productos:</span>
-                  <span class="font-medium">${{ total_price }}</span>
-              </div>
-              <div class="flex justify-between">
-                  <span>Cargo fijo envío:</span>
-                  <span class="font-medium">${{ delivery_fee }}</span>
-              </div>
-              <div class="divider my-2"></div>
-              <div class="flex justify-between text-lg font-bold">
-                  <span>Total a pagar:</span>
-                  <span class="text-primary">${{ final_total }}</span>
-              </div>
+        <h3 class="text-lg font-bold mb-4">Resumen de la Compra</h3>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <span>Subtotal productos:</span>
+            <span class="font-medium">${{ total_price }}</span>
           </div>
+          <div class="flex justify-between">
+            <span>Cargo fijo envío:</span>
+            <span class="font-medium">${{ delivery_fee }}</span>
+          </div>
+          <div class="divider my-2"></div>
+          <div class="flex justify-between text-lg font-bold">
+            <span>Total a pagar:</span>
+            <span class="text-primary">${{ final_total }}</span>
+          </div>
+        </div>
       </div>
 
       <!-- Estado de UPuntos -->
       <div class="alert {{ sufficient_funds|yesno:'alert-success,alert-error' }} shadow-lg mt-6">
-          <div>
-              {% if sufficient_funds %}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span>Tienes suficientes UPuntos ({{ usuario.upuntos }}) para esta compra.</span>
-              {% else %}
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  <span>No tienes suficientes UPuntos ({{ usuario.upuntos }}). Necesitas {{ final_total }} UPuntos.</span>
-              {% endif %}
-          </div>
+        <div>
+          {% if sufficient_funds %}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Tienes suficientes UPuntos ({{ usuario.upuntos }}) para esta compra.</span>
+          {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>No tienes suficientes UPuntos ({{ usuario.upuntos }}). Necesitas {{ final_total }} UPuntos.</span>
+          {% endif %}
+        </div>
       </div>
 
-      <!-- Formulario con instrucciones de entrega -->
+      <!-- Formulario con instrucciones de entrega y botón -->
       <div class="mt-10 max-w-2xl mx-auto">
-        {% if sufficient_funds %}
-          <form method="post" action="{% url 'create_order' %}">
-            {% csrf_token %}
-            <div class="flex flex-col gap-4">
-              {% for shop, items in cart_items_by_shop.items %}   <!-- Sección de instrucciones de entrega para cada tienda -->
-                <div tabindex="0"
-                     class="collapse collapse-arrow bg-base-100 shadow rounded-xl">
-                  <input type="checkbox" class="peer" />
-                  <div class="collapse-title text-base-content font-medium">
-                    Instrucciones de entrega para
-                    <span class="font-bold text-primary">{{ shop.shopName }}</span>:
-                  </div>
-
-                  <div class="collapse-content transition-all duration-300 peer-checked:max-h-60">
-                    <textarea name="instructions_{{ forloop.counter0 }}"
-                              rows="2"
-                              class="textarea textarea-primary w-full resize-none"
-                              placeholder="Ej: Dejar en portería, llamar al llegar…"></textarea>
-                  </div>
+        <form method="post" action="{% url 'create_order' %}">
+          {% csrf_token %}
+          <div class="flex flex-col gap-4">
+            {% for shop, items in cart_items_by_shop.items %}
+              <div tabindex="0"
+                   class="collapse collapse-arrow bg-base-100 shadow rounded-xl">
+                <input type="checkbox" class="peer" checked />
+                <div class="collapse-title text-base-content font-medium">
+                  Instrucciones de entrega para
+                  <span class="font-bold text-primary">{{ shop.shopName }}</span>:
                 </div>
-              {% endfor %}
-            </div>
-
-            <div class="flex justify-end mt-6">
-              <button type="submit" class="btn btn-primary">Enviar orden</button>
-            </div>
-          </form>
-        {% else %}
-          <div class="flex justify-end mt-6">
-            <a href="{% url 'profile' %}" class="btn btn-primary">Recargar UPuntos</a>
+                <div class="collapse-content transition-all duration-300 peer-checked:max-h-60">
+                  <textarea name="instructions_{{ forloop.counter0 }}"
+                            rows="2"
+                            class="textarea textarea-primary w-full resize-none"
+                            placeholder="Ej: Dejar en portería, llamar al llegar…"></textarea>
+                </div>
+              </div>
+            {% endfor %}
           </div>
-        {% endif %}
+          <div class="flex justify-end mt-6">
+            {% if sufficient_funds %}
+              <button type="submit" class="btn btn-primary">Enviar orden</button>
+            {% else %}
+              <a href="{% url 'profile' %}" class="btn btn-primary">Recargar UPuntos</a>
+            {% endif %}
+          </div>
+        </form>
       </div>
-    {% else %}   <!-- Si no hay ítems, se muestra una versión simplificada del carrito -->
+    {% else %}
       <div class="flex flex-col items-center justify-center py-20">
         <p class="text-lg text-gray-500 mb-4">Tu carrito está vacío.</p>
         <a href="{% url 'home' %}" class="btn btn-accent">Volver al inicio</a>
       </div>
     {% endif %}
-  {% else %}   <!-- Se duplica la versión simplificada del carrito para evitar posibles errores futuros -->
+  {% else %}
     <div class="flex flex-col items-center justify-center py-20">
       <p class="text-lg text-gray-500 mb-4">Tu carrito está vacío.</p>
       <a href="{% url 'home' %}" class="btn btn-accent">Volver al inicio</a>
