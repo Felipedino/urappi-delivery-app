@@ -25,16 +25,23 @@
         {% endif %}
         <p> {{notification.message}} </p>
 
-        {% if notification.type == "entregado" and notification.order.rated == False %}
+        {% if notification.type == "entregado" and notification.order.rated == False and notification.order %}
             {% if notification.order.deliverer %}
-            <form method="post" action="{% url 'rate_deliverer' notification.order.deliverer.id %}">
+            <form method="post" action="{% url 'rate' notification.order.deliverer.id notification.order.shop.shopID %}">
                 {% csrf_token %}
                 <input type="hidden" name="order_id" value="{{ notification.order.id }}">
                     
                 <div class="rating-stars">
                     <span>Califica esta entrega: </span>
                     {% for i in "12345" %}
-                        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" {% if forloop.first %}checked{% endif %}>
+                        <input type="radio" id="star{{ i }}" name="rating_deliverer" value="{{ i }}" {% if forloop.first %}checked{% endif %}>
+                        <label for="star{{ i }}">★</label>
+                    {% endfor %}
+                </div>
+                <div class="rating-stars">
+                    <span>Califica la tienda: </span>
+                    {% for i in "12345" %}
+                        <input type="radio" id="star{{ i }}" name="rating_shop" value="{{ i }}" {% if forloop.first %}checked{% endif %}>
                         <label for="star{{ i }}">★</label>
                     {% endfor %}
                 </div>
