@@ -285,7 +285,8 @@ def show_notifications(request):
     except Notification.DoesNotExist:
         print("notification does not exist!")
 
-    context = {"notifications": notifications}
+    context = {"usuario":request.user
+               ,"notifications": notifications}
     return render(request, "app_comprador/notification_menu.html", context)
 
 
@@ -297,28 +298,40 @@ def delete_notification(request, notification_id):
             Notification, id=notification_id, user=request.user
         )
         notification.delete()
-        return redirect("/")
+        return redirect("show_notifications")
 
 
 @login_required(login_url="/login")
-def rate_deliverer(request, deliverer_id):
+def rate(request, deliverer_id, shop_id):
     if request.method == "POST":
-        rating = int(request.POST.get("rating"))
+        rating_deliverer = int(request.POST.get("rating_deliverer"))
+        rating_shop = int(request.POST.get("rating_shop"))
         order_id = request.POST.get("order_id")
 
-        if rating < 1 or rating > 5:
+        if rating_deliverer < 1 or rating_deliverer > 5:
+            return
+        
+        if rating_shop < 1 or rating_shop > 5:
             return
 
         # objects
         deliverer = get_object_or_404(User, id=deliverer_id)
         order = get_object_or_404(Order, id=order_id)
+        shop = get_object_or_404(Shop, shopID=shop_id)
 
-        # update rating
+        # update deliverer rating
         sum = deliverer.rating * deliverer.votes
-        sum += rating
+        sum += rating_deliverer
         deliverer.votes += 1
         deliverer.rating = sum / deliverer.votes
         deliverer.save()
+
+        # update shop rating
+        sum = shop.rating * shop.votes
+        sum += rating_shop
+        shop.votes += 1
+        shop.rating = sum / shop.votes
+        shop.save()
 
         # mark order as rated
         order.rated = True

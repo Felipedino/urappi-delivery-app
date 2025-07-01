@@ -128,6 +128,7 @@ def order_details(request, order_id):
             else selected_order.customer.username
         ),
         "location": selected_order.deliveryLocation,
+        "instructions":selected_order.deliveryInstructions,
         "time": selected_order.createdAt.strftime("%H:%M"),
         "createdAt": selected_order.createdAt.strftime("%Y-%m-%d"),
         "product_list": product_list,

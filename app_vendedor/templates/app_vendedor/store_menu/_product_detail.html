@@ -1,4 +1,4 @@
-<!-- Este html corresponde a cada cuadro con información del producto en el menú de la tienda-->
+<!-- Este html corresponde a cada cuadro con información del producto en el menú dl vendedor-->
 {% load static %}
 <div class="items-center" >
   <div class="list-row items-center" id="product-{{ counter }}">
@@ -9,12 +9,14 @@
         alt="{{ producto.ProductName }}"
         class="rounded-lg border border-base-300 w-36 h-36 object-cover mr-6"
       />
+
       <div class="flex-1">
         <h3 class="text-xl font-bold">{{ producto.ProductName }}</h3>
         <p class="text-gray-600 mb-1">{{ producto.description }}</p>
         <p class="text-sm">Stock: {{ producto.stock }}</p>
         <p class="font-bold text-primary mb-2">$ {{ producto.priceCLP }}</p>
         <button type="button" class="btn btn-primary btn-sm" onclick="modifyProduct('{{ counter }}', '{{ producto.productID }}')">Editar producto</button>
+
       </div>
     </div>
 
@@ -30,28 +32,36 @@
         <label class="label" for="nombre_producto_{{producto.productID}}">
             <span class="label-text">Nombre del producto</span>
         </label>
+
         <input type="text" id="nombre_producto_{{producto.productID}}" name="nombre_producto_{{producto.productID}}" class="input input-bordered input-primary w-full" placeholder="Completo italiano" value="{{ producto.ProductName}}" required/>
+
       </div>
 
       <div class="form-control mt-6">
         <label class="label" for="descr_producto_{{producto.productID}}">
             <span class="label-text">Descripción del producto</span>
         </label>
+
         <textarea type="text" id="descr_producto_{{producto.productID}}" name="descr_producto_{{producto.productID}}" class="textarea textarea-primary w-full h-32" placeholder="Salchicha, palta hass, tomate y mayo casera." >{{ producto.description }}</textarea>
+
       </div>
 
       <div class="form-control mt-6">
         <label class="label" for="stock_producto_{{producto.productID}}">
             <span class="label-text">Stock disponible</span>
         </label>
+
         <input type="number" id="stock_producto_{{producto.productID}}" name="stock_producto_{{producto.productID}}" class="input input-primary w-full placeholder=" min="1" inputmode="numeric" value="{{ producto.stock }}" required />
+
       </div>
 
       <div class="form-control mt-6">
         <label class="label" for="valor_producto_{{producto.productID}}">
             <span class="label-text">Precio unitario (CLP)</span>
         </label>
+
         <input type="text" id="valor_producto_{{producto.productID}}" name="valor_producto_{{producto.productID}}" class="input input-primary w-full" placeholder="$1.500" value="{{ producto.priceCLP }}" inputmode="numeric" required />
+
       </div>
 
       <div class="form-control mt-6">
