@@ -32,9 +32,7 @@ Proyecto del curso CC4401 - Universidad de Chile
 
 ## Descripción
 
-Este proyecto corresponde a una aplicación web desarrollada en Django, que utiliza Tailwind CSS 4 y daisyUI 5 para el diseño de la interfaz. El objetivo es servir como base para el desarrollo modular de aplicaciones web en el contexto del curso CC4401.
-
-
+Este proyecto corresponde a una aplicación web desarrollada en Django, que utiliza Tailwind CSS 4 y daisyUI 5 para el diseño de la interfaz. El objetivo es servir como base para el desarrollo modular de aplicaciones web en el contexto del curso CC4401 Ingeniería de Software DCC-UChile. Incluye gestión de usuarios multi-rol, carrito multi-tienda, sistema de UPuntos (moneda virtual) y tracking de pedidos en tiempo real.
 
 
 ## Instalación y Configuración
